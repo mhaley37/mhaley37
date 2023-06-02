@@ -4,7 +4,7 @@ on:
     inputs:
       gh-pages:
         description: "Flag used to enable gh-pages deployment"
-        default: ""
+        default: " "
         required: false
 jobs:
   deploy-gh-pages:
