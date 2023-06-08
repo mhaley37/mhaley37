@@ -1,26 +1,20 @@
-name: Test
+name: Matrix Test
 on:
   workflow_dispatch:
-    inputs:
-      gh-pages:
-        description: "Flag used to enable gh-pages deployment"
-        default: false
-        required: false
-        type: boolean
 jobs:
   matrix-test:
     strategy:
       matrix:
         browser: ['chrome', 'edge']
         os: ['ubuntu-latest', 'windows-2022']
-        exclude:
-          - os: windows-2022
-            browser: chrome
-        include:
-          - os: windows-2022
-            generic-name: Windows
-          - os: ubuntu-latest
-            generic-name: Ubuntu
+#         exclude:
+#           - os: windows-2022
+#             browser: chrome
+#         include:
+#           - os: windows-2022
+#             generic-name: Windows
+#           - os: ubuntu-latest
+#             generic-name: Ubuntu
     runs-on: ubuntu-latest
     name: ${{ matrix.generic-name }} ${{ matrix.browser }} e2e browser tests
     steps:
