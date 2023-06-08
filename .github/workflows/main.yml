@@ -8,12 +8,22 @@ on:
         required: false
         type: boolean
 jobs:
-  deploy-gh-pages:
-    if: ${{ inputs.gh-pages }} 
+  matrix-test:
+    strategy:
+      matrix:
+        browser: ['chrome', 'edge']
+        os: ['ubuntu-latest', 'windows-2022']
+        exclude:
+          - os: windows-2022
+            browser: chrome
+        include:
+          - os: windows-2022
+            generic-name: Windows
+          - os: ubuntu-latest
+            generic-name: Ubuntu
     runs-on: ubuntu-latest
+    name: ${{ matrix.generic-name }} ${{ matrix.browser }} e2e browser tests
     steps:
-      - uses: actions/checkout@v3
-        with:
-          repository: ${{ env.REPO }}
-          token: ${{ env.TOKEN }}
-          ref: ${{ inputs.branch }}
+    - name: test step
+      run: |
+        echo " hello!"
