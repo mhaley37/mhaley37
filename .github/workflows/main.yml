@@ -17,4 +17,6 @@ jobs:
     steps:
     - name: test step
       run: |
-        echo "cy:run${{ inputs.type == 'integration' && ':'  || '' }}${{ inputs.type == 'integration' && inputs.type  || '' }}"
+        echo |
+          "cy:run${{ inputs.type == 'integration' && ':'  || '' }}${{ inputs.type == 'integration' && inputs.type  || '' }}"
+          "cy:run${{ inputs.type == 'integration' }}
