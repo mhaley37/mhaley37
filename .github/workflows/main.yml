@@ -1,23 +1,20 @@
 name: Matrix Test
 on:
   workflow_dispatch:
+    inputs:
+      env:
+        # expects "local" (default) or dev, qa, sandbox, prod
+        default: local
+        description: The environment to test
+        required: false    
+      type:
+        # expect "browser" or "integration"
+        default: browser
+        required: false
 jobs:
-  matrix-test:
-    strategy:
-      matrix:
-        browser: ['chrome', 'edge']
-        os: ['ubuntu-latest', 'windows-2022']
-#         exclude:
-#           - os: windows-2022
-#             browser: chrome
-#         include:
-#           - os: windows-2022
-#             generic-name: Windows
-#           - os: ubuntu-latest
-#             generic-name: Ubuntu
-    runs-on: ubuntu-latest
-    name: ${{ matrix.generic-name }} ${{ matrix.browser }} e2e browser tests
+  test:
+    runs-on: ubuntu
     steps:
     - name: test step
       run: |
-        echo " hello!"
+        echo "cy:run${{ inputs.type == 'integration' && ':'  || '' }}${{ inputs.type == 'integration' && inputs.type  || '' }}"
