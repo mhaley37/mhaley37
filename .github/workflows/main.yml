@@ -18,4 +18,4 @@ jobs:
     - name: test step
       run: |
         echo "cy:run${{ inputs.type == 'integration' && ':'  || '' }}${{ inputs.type == 'integration' && inputs.type  || '' }}"
-        echo "cy:run${{ inputs.type == 'integration' && ':integration'}}"
+        echo "cy:run${{ inputs.type == 'integration' && ':integration' || '' }}"
