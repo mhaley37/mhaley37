@@ -2,6 +2,10 @@ name: Matrix Test
 on:
   workflow_dispatch:
     inputs:
+      browser-name:
+        description: 'Name of browser to run tests'
+        # TODO: See if can make true IF env == local....think not.
+        required: false    
       env:
         # expects "local" (default) or dev, qa, sandbox, prod
         default: local
@@ -15,6 +19,14 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+    - name: validate-input
+      run: |
+        if [ ${{ inputs.env == 'local' && !inputs.browser }} ]
+        then
+          exit 1
+        else
+          echo "Valid."
+      
     - name: test step
       run: |
         echo "cy:run${{ inputs.type == 'integration' && ':'  || '' }}${{ inputs.type == 'integration' && inputs.type  || '' }}"
