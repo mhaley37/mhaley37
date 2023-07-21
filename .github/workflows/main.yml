@@ -19,8 +19,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: Check for browser if using local
-      if: inputs.env == 'local' && !inputs.browser
+    - name: Exit local run if missing browser
+      if: inputs.env == 'local' && !inputs.browser-name
       run: exit 1
       
     - name: test step
