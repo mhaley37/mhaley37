@@ -19,12 +19,9 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: check browser for local
-      run: |
-        if [ ${{ inputs.env == 'local' && !inputs.browser }} ]
-        then
-          exit 1
-        fi
+    - name: Check for browser if using local
+      if: inputs.env == 'local' && !inputs.browser
+      run: exit 1
       
     - name: test step
       run: |
