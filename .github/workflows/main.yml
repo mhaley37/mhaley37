@@ -19,4 +19,4 @@ jobs:
       run: |
         echo |
           "cy:run${{ inputs.type == 'integration' && ':'  || '' }}${{ inputs.type == 'integration' && inputs.type  || '' }}"
-          "cy:run${{ inputs.type == 'integration' }}
+          "cy:run${{ inputs.type == 'integration' }}"
