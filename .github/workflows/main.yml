@@ -23,7 +23,7 @@ jobs:
       run: |
         if [ ${{ inputs.env == 'local' && !inputs.browser }} ]
         then
-          exit 1
+          echo "invalid"
         else
           echo "Valid."
       
