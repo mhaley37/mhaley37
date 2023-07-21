@@ -19,13 +19,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: validate-input
+    - name: check browser for local
       run: |
         if [ ${{ inputs.env == 'local' && !inputs.browser }} ]
         then
-          echo "invalid"
-        else
-          echo "Valid."
+          exit 1
         fi
       
     - name: test step
