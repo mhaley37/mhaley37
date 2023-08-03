@@ -1,0 +1,46 @@
+name: Test Failures
+
+on:
+  push:
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  pr-check:
+    name: Check if PR closed or merged
+    runs-on: ubuntu-latest
+    steps:
+      - name: step
+        run: echo "PR check"
+
+  setup-env-args:
+    name: Setup environment arguments
+    needs: [pr-check]
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v3
+          
+  deploy:
+    name: Deploy
+    needs: [pr-check, setup-env-args] 
+    runs-on: ubuntu-22.04
+    steps:
+    - name: deploy-step
+      run: echo "Deploy done!"
+    
+  e2e-tests:
+    name: E2E Tests
+    needs: [pr-check, setup-env-args, deploy]
+    runs-on: ubuntu-22.04
+    steps:
+    - name: step
+      run: echo "e2e-tests done!"
+      
+  rollback-on-e2e-failure:
+    name: Rollback if E2E Tests Fail
+    runs-on: ubuntu-22.04
+    needs: [pr-check, e2e-tests]
+    steps:
+    - name: Check e2e-tests result
+      run: |
+        echo "e2e-tests status is: ${{ needs.e2e-tests.result }}"
