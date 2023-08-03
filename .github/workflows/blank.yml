@@ -43,8 +43,9 @@ jobs:
   rollback-on-e2e-failure:
     name: Rollback if E2E Tests Fail
     runs-on: ubuntu-22.04
-    needs: [pr-check, e2e-tests]
-    if: failure() && needs.e2e-tests.result == 'failure'
+    # TODO: Check if we need deploy here -- I'm thinking yes.
+    needs: [deploy, e2e-tests]
+    if: failure() && needs.deploy.result == 'success' && needs.e2e-tests.result == 'failure'
     steps:
     - name: Check e2e-tests result
       run: |
