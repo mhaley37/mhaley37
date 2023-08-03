@@ -43,7 +43,7 @@ jobs:
     name: Rollback if E2E Tests Fail
     runs-on: ubuntu-22.04
     needs: [pr-check, e2e-tests]
-    if: failure()
+    if: failure() && needs.e2e-tests.result == 'failure'
     steps:
     - name: Check e2e-tests result
       run: |
