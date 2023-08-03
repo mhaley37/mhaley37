@@ -26,7 +26,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: deploy-step
-      run: echo "Deploy done!"
+      run: |
+        echo "Deploy done!"
+        exit 3
     
   e2e-tests:
     name: E2E Tests
@@ -36,7 +38,6 @@ jobs:
     - name: step
       run: |
         echo "e2e-tests done!"
-        exit 3
       
   rollback-on-e2e-failure:
     name: Rollback if E2E Tests Fail
