@@ -34,7 +34,9 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
     - name: step
-      run: echo "e2e-tests done!"
+      run: |
+        echo "e2e-tests done!"
+        exit 3
       
   rollback-on-e2e-failure:
     name: Rollback if E2E Tests Fail
