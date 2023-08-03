@@ -28,7 +28,7 @@ jobs:
     - name: deploy-step
       run: |
         echo "Deploy done!"
-        exit 3
+        exit 0
     
   e2e-tests:
     name: E2E Tests
@@ -38,6 +38,7 @@ jobs:
     - name: step
       run: |
         echo "e2e-tests done!"
+        exit 9
       
   rollback-on-e2e-failure:
     name: Rollback if E2E Tests Fail
