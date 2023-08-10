@@ -1,8 +1,11 @@
 name: Test Failures
 
 on:
-  push:
   workflow_dispatch:
+    inputs:
+      token:
+        required: false
+        default: ''
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -10,7 +13,7 @@ jobs:
     name: Check if PR closed or merged
     runs-on: ubuntu-latest
     env:
-      TOKEN: ${{ 'mike' != '' && 'mike' || secrets.GH_TOKEN }}
+      TOKEN: ${{ inputs.token != '' && inputs.token || secrets.GH_TOKEN }}
     steps:
       - name: step
         run: |
