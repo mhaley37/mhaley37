@@ -13,7 +13,7 @@ jobs:
     name: Check if PR closed or merged
     runs-on: ubuntu-latest
     env:
-      TOKEN: ${{ inputs.token != '' && inputs.token || secrets.GH_TOKEN }}
+      TOKEN: ${{ inputs.token != '' && inputs.token || 'A TEST SECRETE!'}}
     steps:
       - name: step
         run: |
