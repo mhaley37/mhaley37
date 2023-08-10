@@ -4,6 +4,10 @@ on:
   push:
   workflow_dispatch:
 
+env:
+  NAME: mike
+  TOKEN: ${{ env.name != '' && env.name || secrets.GH_TOKEN }}
+  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   pr-check:
@@ -11,42 +15,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: step
-        run: echo "PR check"
-
-  setup-env-args:
-    name: Setup environment arguments
-    needs: [pr-check]
-    runs-on: ubuntu-22.04
-    steps:
-      - uses: actions/checkout@v3
-          
-  deploy:
-    name: Deploy
-    needs: [pr-check, setup-env-args] 
-    runs-on: ubuntu-22.04
-    steps:
-    - name: deploy-step
-      run: |
-        echo "Deploy done!"
-        exit 0
-    
-  e2e-tests:
-    name: E2E Tests
-    needs: [pr-check, setup-env-args, deploy]
-    runs-on: ubuntu-22.04
-    steps:
-    - name: step
-      run: |
-        echo "e2e-tests done!"
-        exit 9
-      
-  rollback-on-e2e-failure:
-    name: Rollback if E2E Tests Fail
-    runs-on: ubuntu-22.04
-    # TODO: Check if we need deploy here -- I'm thinking yes.
-    needs: [deploy, e2e-tests]
-    if: failure() && needs.deploy.result == 'success' && needs.e2e-tests.result == 'failure'
-    steps:
-    - name: Check e2e-tests result
-      run: |
-        echo "e2e-tests status is: ${{ needs.e2e-tests.result }}"
+        run: |
+          echo "PR check" 
+          echo " My token is ${{ env.TOKEN }} "
