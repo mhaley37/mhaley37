@@ -4,16 +4,13 @@ on:
   push:
   workflow_dispatch:
 
-env:
-  NAME: mike
-  
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   pr-check:
     name: Check if PR closed or merged
     runs-on: ubuntu-latest
     env:
-      TOKEN: ${{ env.name != '' && env.name || secrets.GH_TOKEN }}
+      TOKEN: ${{ 'mike' != '' && 'mike' || secrets.GH_TOKEN }}
     steps:
       - name: step
         run: |
