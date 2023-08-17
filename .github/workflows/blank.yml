@@ -1,20 +1,24 @@
 name: Test Failures
 
 on:
-  workflow_dispatch:
-    inputs:
-      token:
-        required: false
+  push:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  pr-check:
-    name: Check if PR closed or merged
+  check-changed-files:
+    name: Check changd files
     runs-on: ubuntu-latest
-    env:
-      TOKEN: ${{ inputs.token || 'A TEST SECRETE!'}}
     steps:
-      - name: step
+
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            .github/**
+            README.md
+
+      - name: Did anything change
+        if: steps.changed-files.outputs.any_changed == 'true'          
         run: |
-          echo "PR check" 
-          echo " My token is ${{ env.TOKEN }} "
+          echo "files have been changed!"
