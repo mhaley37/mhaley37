@@ -15,7 +15,6 @@ jobs:
         uses: tj-actions/changed-files@v35
         with:
           files: |
-            .github/**
             README.md
 
       - name: Did anything change
