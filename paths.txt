@@ -1,3 +1,4 @@
 package.json
 some fake path
 yarn.lock
+asdfasdfasdf
