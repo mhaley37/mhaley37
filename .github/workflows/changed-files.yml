@@ -15,6 +15,19 @@ jobs:
           # TODO: Get the preceeding commit sha
           fetch-depth: 2
           
+      - name: Get file depend paths
+        id: get-file-depend-paths
+        run: echo "file_paths=$(jq -r 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)" >> $GITHUB_OUTPUT
+        shell: bash
+          
+      - name: Get parsed file paths
+        run: |
+          for path in ${{ steps.get-file-depend-paths.outputs.file_paths }}
+          do
+            echo "File is $path"
+          end
+        shell: bash
+
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v35
