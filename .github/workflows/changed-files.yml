@@ -17,7 +17,9 @@ jobs:
 
       - name: Get image dependency file paths 
         id: get-file-depend-paths
-        run: echo "paths=." >> $GITHUB_ENV
+        run: |
+          paths=.
+          echo $paths >> $GITHUB_ENV
         shell: bash
 
       # - name: Get file depend paths
