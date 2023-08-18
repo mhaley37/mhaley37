@@ -41,9 +41,7 @@ jobs:
         id: special-changed-files
         uses: tj-actions/changed-files@v35
         with:
-          files: |
-            package.json
-            yarn.lock
+          files: ${{ steps.get-file-depend-paths.outputs.paths }}
 
       - name: Did anything change
         if: steps.changed-files.outputs.any_changed == 'true'          
