@@ -36,10 +36,10 @@ jobs:
         run: echo ${{ steps.get-file-depend-paths.outputs.paths }}
       - name: Get parsed file paths
         run: |
-          for path in Every rose has its thorn
+          for path in ${{ steps.get-file-depend-paths.outputs.paths }}
           do
             echo "File is $path"
-          end
+          done
         shell: bash
 
       - name: Get changed files
