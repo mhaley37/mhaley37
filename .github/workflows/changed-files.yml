@@ -22,16 +22,16 @@ jobs:
             echo 'paths<<EOF'
             echo $(jq -r 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)
             echo EOF
-          } >> "$GITHUB_OUTPUT"        
+          } >> "$GITHUB_OUTPUTS"        
         shell: bash
 
-      - name: Get parsed file paths
-        run: |
-          for path in ${{ steps.get-file-depend-paths.outputs.paths }}
-          do
-            echo "File is $path"
-          done
-        shell: bash
+      # - name: Get parsed file paths
+      #   run: |
+      #     for path in ${{ steps.get-file-depend-paths.outputs.paths }}
+      #     do
+      #       echo "File is $path"
+      #     done
+      #   shell: bash
 
       - name: Get changed files
         id: changed-files
@@ -42,6 +42,7 @@ jobs:
         uses: tj-actions/changed-files@v35
         with:
           files: ${{ steps.get-file-depend-paths.outputs.paths }}
+          files_separator: " "
 
       - name: Did anything change
         if: steps.changed-files.outputs.any_changed == 'true'          
