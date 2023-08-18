@@ -13,6 +13,8 @@
     "short-name": "frontend",
     "file-dependencies": [
       "package.json",
+      "packages/backend",
+      "packages/frontend/**",
       "booger",
       "yarn.lock"
     ]

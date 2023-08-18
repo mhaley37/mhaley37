@@ -65,10 +65,11 @@ jobs:
 
       - name: List all SPECIAL changed files (old)
         run: |
-            for file in ${{ steps.special-changed-files.outputs.all_changed_files }}; do
+            for file in ${{ steps.special-changed-files.outputs.all_modified_files }}; do
               echo "special $file was changed"
-            done   
+            done  
+
       - name: Should we rebuild?!?!?!?
-        if: steps.special-changed-files.outputs.any_changed == 'true'
+        if: steps.special-changed-files.outputs.any_modified == 'true'
         run: |
           echo "Stuff has changed, rebuild!!!!"
