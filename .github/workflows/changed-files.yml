@@ -17,12 +17,16 @@ jobs:
           
       - name: Get file depend paths
         id: get-file-depend-paths
-        run: echo "file_paths=$(jq 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)" >> $GITHUB_OUTPUT
+        # file_paths=$(jq 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)
+       
+        run: |
+          paths="hello"
+          echo "$paths" >> $GITHUB_ENV
         shell: bash
           
       - name: Get parsed file paths
         run: |
-          for path in ${{ steps.get-file-depend-paths.outputs.file_paths }}
+          for path in ${{ steps.get-file-depend-paths.outputs.paths }}
           do
             echo "File is $path"
           end
