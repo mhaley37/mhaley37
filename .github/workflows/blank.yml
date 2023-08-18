@@ -13,9 +13,6 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v35
-        with:
-          files: |
-            README.md
 
       - name: Did anything change
         if: steps.changed-files.outputs.any_changed == 'true'          
