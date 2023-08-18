@@ -22,7 +22,7 @@ jobs:
             echo 'paths<<EOF'
             echo $(jq -r 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)
             echo EOF
-          } >> "$GITHUB_ENV"
+          } >> "$GITHUB_OUTPUT"        
         shell: bash
 
       # - name: Get file depend paths
