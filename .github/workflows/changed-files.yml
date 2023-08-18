@@ -42,7 +42,7 @@ jobs:
         uses: tj-actions/changed-files@v35
         with:
           files: |
-            echo ${{ steps.get-file-depend-paths.outputs.paths }}
+            ${{ steps.get-file-depend-paths.outputs.paths }}
 
       - name: Did anything change
         if: steps.changed-files.outputs.any_changed == 'true'          
