@@ -1,0 +1,36 @@
+[
+  {
+    "named-dockerfile": true,
+    "short-name": "backend"
+  },
+  {
+    "context": "packages/app",
+    "named-dockerfile": true,
+    "short-name": "cypress"
+  },
+  {
+    "named-dockerfile": true,
+    "short-name": "frontend",
+    "file-dependencies": [
+      "package.json",
+      "packages/frontend",
+      "yarn.lock"
+    ]
+  },
+  {
+    "context": "git-sync",
+    "short-name": "git-sync"
+  },
+  {
+    "context": "memcached",
+    "short-name": "memcached"
+  },
+  {
+    "context": "postgres",
+    "short-name": "postgres"
+  },
+  {
+    "context": "techdocs",
+    "short-name": "techdocs"
+  }
+]

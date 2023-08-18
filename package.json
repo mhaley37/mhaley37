@@ -1,0 +1,19 @@
+{
+  "name": "mhaley37",
+  "version": "1.0.0",
+  "description": "- 👋 Hi, I’m Mike Haley - 👀 I’m interested in many things",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mhaley37/mhaley37.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mhaley37/mhaley37/issues"
+  },
+  "homepage": "https://github.com/mhaley37/mhaley37#readme"
+}
