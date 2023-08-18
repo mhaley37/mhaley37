@@ -19,18 +19,12 @@ jobs:
       - name: Get ALL changed files
         id: changed-files
         uses: tj-actions/changed-files@v35
-
+          
       - name: List all changed files
         run: |
-          echo "Changed files"
-          echo ${{ steps.changed-files.outputs.all_changed_files }}
-
-          
-      # - name: List all changed files
-      # run: |
-      #   for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-      #     echo "$file was changed"
-      #   done
+          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            echo "$file was changed"
+          done
                
       # NEW
       - name: Get image dependency file paths output to file (new)
@@ -74,3 +68,7 @@ jobs:
             for file in ${{ steps.special-changed-files.outputs.all_changed_files }}; do
               echo "special $file was changed"
             done   
+      - name: Should we rebuild?!?!?!?
+        if: steps.special-changed-files.outputs.any_changed == 'true'
+        run: |
+          echo "Stuff has changed, rebuild!!!!"
