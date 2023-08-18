@@ -20,8 +20,7 @@ jobs:
         # file_paths=$(jq 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)
        
         run: |
-          paths="hello"
-          echo "$paths" >> $GITHUB_ENV
+          echo "paths=hello" >> $GITHUB_ENV
         shell: bash
           
       - name: Get parsed file paths
