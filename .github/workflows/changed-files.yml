@@ -24,6 +24,11 @@ jobs:
             echo EOF
           } >> "$GITHUB_OUTPUT"        
         shell: bash
+        
+      - name: Get image dependency file paths output to file
+        id: get-file-depend-paths-file
+        run: jq -r 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json > paths.txt
+        shell: bash
 
       - name: Get parsed file paths
         run: |
@@ -36,6 +41,12 @@ jobs:
       - name: Get changed files
         id: changed-files
         uses: tj-actions/changed-files@v35
+
+      - name: Get special changed files from file
+        id: special-changed-files-file
+        uses: tj-actions/changed-files@v35
+        with:
+          files_from_source_file: ./paths.txt
 
       - name: Get special changed files
         id: special-changed-files
