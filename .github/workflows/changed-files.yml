@@ -61,7 +61,7 @@ jobs:
         uses: tj-actions/changed-files@v35
         with:
           files: ${{ steps.get-file-depend-paths.outputs.paths }}
-          files_separator: " "
+          #files_separator: " "
 
       - name: List all SPECIAL changed files (old)
         run: |
