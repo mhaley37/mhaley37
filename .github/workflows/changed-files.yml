@@ -42,12 +42,14 @@ jobs:
         uses: tj-actions/changed-files@v35
         with:
           files: |
-            ${{ steps.get-file-depend-paths.outputs.paths }}
+            package.json
+            yarn.lock
 
       - name: Did anything change
         if: steps.changed-files.outputs.any_changed == 'true'          
         run: |
           echo "files have been changed!"
+
 
       - name: List all changed files
         run: |
