@@ -13,7 +13,7 @@
     "short-name": "frontend",
     "file-dependencies": [
       "package.json",
-      "some-fake-path",
+      "some fake path",
       "yarn.lock"
     ]
   },
