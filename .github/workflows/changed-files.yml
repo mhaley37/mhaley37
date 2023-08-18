@@ -1,4 +1,4 @@
-name: Test Failures
+name: See Changed Files
 
 on:
   push:
@@ -19,13 +19,28 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v35
 
+      - name: Get special changed files
+        id: special-changed-files
+        uses: tj-actions/changed-files@v35
+        with:
+          files: |
+            package.json
+            yarn.lock
+            backend/**
+
       - name: Did anything change
         if: steps.changed-files.outputs.any_changed == 'true'          
         run: |
           echo "files have been changed!"
+
 
       - name: List all changed files
         run: |
           for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
             echo "$file was changed"
           done
+      - name: List all SPECIAL changed files
+        run: |
+            for file in ${{ steps.changed-files.outputs.special_changed_files }}; do
+              echo "special $file was changed"
+            done          
