@@ -15,19 +15,14 @@ jobs:
           # TODO: Get the preceeding commit sha
           fetch-depth: 2
 
-      # - name: Get image dependency file paths 
-      #   id: get-file-depend-paths
-      #   run: |
-      #     {
-      #       echo 'paths<<EOF'
-      #       echo $(jq -r 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)
-      #       echo EOF
-      #     } >> "$GITHUB_OUTPUT"        
-      #   shell: bash
-
       - name: Get image dependency file paths 
         id: get-file-depend-paths
-        run: echo $(jq -r 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json) >> "$GITHUB_OUTPUT"        
+        run: |
+          {
+            echo 'paths<<EOF'
+            echo $(jq -r 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)
+            echo EOF
+          } >> "$GITHUB_OUTPUT"        
         shell: bash
 
       # - name: Get file depend paths
@@ -41,7 +36,7 @@ jobs:
         run: echo ${{ steps.get-file-depend-paths.outputs.paths }}
       - name: Get parsed file paths
         run: |
-          for path in ${{ steps.get-file-depend-paths.outputs.paths }}
+          for path in Every rose has its thorn
           do
             echo "File is $path"
           end
