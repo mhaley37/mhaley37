@@ -14,13 +14,10 @@ jobs:
         with:
           # TODO: Get the preceeding commit sha
           fetch-depth: 2
-          
-      - name: Get file depend paths
+
+      - name: Set default image context
+        run: echo "paths=." >> $GITHUB_ENV
         id: get-file-depend-paths
-        # file_paths=$(jq 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)
-       
-        run: |
-          echo "paths=hello" >> $GITHUB_ENV
         shell: bash
           
       - name: Get parsed file paths
