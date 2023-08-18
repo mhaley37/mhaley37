@@ -20,10 +20,9 @@ jobs:
         run: |
           {
             echo 'paths<<EOF'
-            echo $(jq 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)
+            echo $(jq -r 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)
             echo EOF
           } >> "$GITHUB_ENV"
-        #run: echo "paths=$(jq 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)" >> $GITHUB_ENV
         shell: bash
 
       # - name: Get file depend paths
