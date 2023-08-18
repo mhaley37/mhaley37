@@ -17,7 +17,8 @@ jobs:
 
       - name: Get image dependency file paths 
         id: get-file-depend-paths
-        run: echo "paths=$(jq 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)" >> $GITHUB_ENV
+        run: echo "paths=." >> $GITHUB_ENV
+        #run: echo "paths=$(jq 'map(select(.["short-name"] == "frontend")) | .[0] | .["file-dependencies"] | .[]' docker-images.json)" >> $GITHUB_ENV
         shell: bash
 
       # - name: Get file depend paths
@@ -29,7 +30,6 @@ jobs:
       #   shell: bash
       - name: Output file names
         run: echo ${{ steps.get-file-depend-paths.outputs.paths }}
-        
       - name: Get parsed file paths
         run: |
           for path in ${{ steps.get-file-depend-paths.outputs.paths }}
