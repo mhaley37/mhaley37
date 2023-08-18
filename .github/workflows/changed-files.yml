@@ -22,9 +22,15 @@ jobs:
 
       - name: List all changed files
         run: |
-          for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
-            echo "$file was changed"
-          done
+          echo "Changed files"
+          echo ${{ steps.changed-files.outputs.all_changed_files }}
+
+          
+      # - name: List all changed files
+      # run: |
+      #   for file in ${{ steps.changed-files.outputs.all_changed_files }}; do
+      #     echo "$file was changed"
+      #   done
                
       # NEW
       - name: Get image dependency file paths output to file (new)
@@ -61,7 +67,7 @@ jobs:
         uses: tj-actions/changed-files@v35
         with:
           files: ${{ steps.get-file-depend-paths.outputs.paths }}
-          #files_separator: " "
+          files_separator: " "
 
       - name: List all SPECIAL changed files (old)
         run: |
