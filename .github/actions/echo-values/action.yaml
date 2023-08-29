@@ -20,8 +20,10 @@ runs:
     - name: print stuff
       run: |
         echo "Secrets"
+        echo ${{ inputs.secrets }}
         echo ${{ toJson(inputs.secrets) }}
         echo "Vars"
+        echo ${{ inputs.vars }}
         echo ${{ toJson(inputs.vars) }}    
       shell: bash  
    # - name: Upgrade (or install) helm release
