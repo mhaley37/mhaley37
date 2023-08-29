@@ -1,0 +1,28 @@
+name: 'Validate how secrets are passed'
+description: 'do stuff'
+inputs:
+  secrets:
+    description: 'Repository secrets'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup repo secrets as env variables
+      run: |
+        # TODO: MFH - Need to change this to also include environment secrets
+        buffer=$(echo ${{ toJson(inputs.secrets) }} | sed 's/\\n//g' | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]');
+        echo "$buffer" >> $GITHUB_ENV
+        buffer2=$(echo ${{ toJson(inputs.secrets) }} | sed 's/\\n//g' | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]');
+        echo "$buffer2" >> $GITHUB_ENV        
+      shell: bash
+   # - name: Upgrade (or install) helm release
+    #   id: upgrade
+    #   run: >
+    #     envsubst < ${{ github.workspace }}/helm/lighthouse-developer-portal/values.yaml |
+    #     helm upgrade ${RELEASE_NAME} helm/lighthouse-developer-portal/
+    #     --debug
+    #     --install
+    #     --namespace lighthouse-bandicoot-${{ inputs.deploy-env }}
+    #     --values -
+    #     ${OPT_ARGS}
+    #   shell: bash

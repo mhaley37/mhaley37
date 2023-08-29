@@ -1,0 +1,25 @@
+name: Test out composite stuff
+
+on:
+  workflow_dispatch: 
+
+
+jobs:
+
+  test:
+    name: Deploy to Dev
+    if: ${{ always() }}
+    runs-on: ubuntu-latest
+    environment:
+      name: Dev
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Echo values
+        id: ECHO-VALUES
+        continue-on-error: true
+        uses: ./.github/actions/echo-values
+        with:
+          secrets: ${{ toJson(secrets) }}
+          vars: ${{ toJson(vars)}}
