@@ -2,6 +2,7 @@ name: Test out composite stuff
 
 on:
   workflow_dispatch: 
+  push:
 
 
 jobs:
