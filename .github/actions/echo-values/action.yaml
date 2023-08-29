@@ -14,15 +14,15 @@ runs:
         # TODO: MFH - Need to change this to also include environment secrets
         buffer=$(echo ${{ toJson(inputs.secrets) }} | sed 's/\\n//g' | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]');
         echo "$buffer" >> $GITHUB_ENV
-        buffer2=$(echo ${{ toJson(inputs.secrets) }} | sed 's/\\n//g' | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]');
+        buffer2=$(echo ${{ toJson(inputs.vars) }} | sed 's/\\n//g' | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]');
         echo "$buffer2" >> $GITHUB_ENV        
       shell: bash
     - name: print stuff
       run: |
         echo "Secrets"
-        echo ${{ env.buffer }}
+        echo ${{ toJson(inputs.secrets) }}
         echo "Vars"
-        echo ${{ env.buffer2 }}    
+        echo ${{ toJson(inputs.vars) }}    
       shell: bash  
    # - name: Upgrade (or install) helm release
     #   id: upgrade
