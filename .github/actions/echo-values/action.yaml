@@ -17,6 +17,12 @@ runs:
         buffer2=$(echo ${{ toJson(inputs.secrets) }} | sed 's/\\n//g' | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]');
         echo "$buffer2" >> $GITHUB_ENV        
       shell: bash
+    - name: print stuff
+      run: |
+        echo "Secrets"
+        echo ${{ env.buffer }}
+        echo "Vars"
+        echo ${{ env.buffer2 }}       
    # - name: Upgrade (or install) helm release
     #   id: upgrade
     #   run: >
