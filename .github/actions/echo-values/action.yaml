@@ -22,7 +22,9 @@ runs:
         echo "Secrets"
         echo ${{ toJson(inputs.secrets) }}
         echo "Vars"
-        echo ${{ toJson(inputs.vars) }}    
+        echo ${{ toJson(inputs.vars) }} 
+        echo ${{ env.VAR1 }}
+        echo ${{ env.A_SECRET}} 
       shell: bash  
    # - name: Upgrade (or install) helm release
     #   id: upgrade
