@@ -11,10 +11,12 @@ runs:
   steps:
     - name: Setup repo secrets as env variables
       run: |
-        declare -a values=(${{ toJSON(inputs.secrets) }}, ${{ toJSON(inputs.vars) }})
+        declare -a values=(${{ inputs.secrets }}, ${{ inputs.vars }})
         for i in "${values[@]}"
         # TODO: MFH - Need to change this to also include environment secrets
-        buffer=$(echo $i | sed 's/\\n//g' | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]');
+        buffer=$(echo ${{ toJson($i) }} | 
+                sed 's/\\n//g' | 
+                jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]');
         echo "$buffer" >> $GITHUB_ENV    
       shell: bash
     - name: print stuff
