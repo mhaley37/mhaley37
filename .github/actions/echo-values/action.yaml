@@ -2,7 +2,9 @@ name: 'Validate how secrets are passed'
 description: 'do stuff'
 inputs:
   secrets:
-    description: 'Repository secrets'
+    description: 'JSON encoded repo environment secrets'
+  vars:
+    description: 'JSON encoded repo environment variables'
 
 runs:
   using: 'composite'
