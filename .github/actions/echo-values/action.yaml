@@ -22,7 +22,8 @@ runs:
         echo "Secrets"
         echo ${{ env.buffer }}
         echo "Vars"
-        echo ${{ env.buffer2 }}       
+        echo ${{ env.buffer2 }}    
+      shell: bash  
    # - name: Upgrade (or install) helm release
     #   id: upgrade
     #   run: >
