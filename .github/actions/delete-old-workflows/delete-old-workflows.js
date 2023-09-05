@@ -13,7 +13,6 @@ const deleteOldWorkflowsRuns = async () => {
     });
     const workflowPaths = workflows.data.map( d => d.path );
     const runs = (await octokit.paginate(octokit.rest.actions.listWorkflowRunsForRepo, {...options, status: 'completed' })).flat().filter( run => run.status !='in_progress')
-    console.log(runs)
     const deletedRuns = [];
     runs.forEach( run => {
       const {event, head_branch, id, path} = run;
@@ -27,7 +26,7 @@ const deleteOldWorkflowsRuns = async () => {
       }
 
     })
-    await Promise.all(deletedRuns.forEach( run_id => octokit.rest.actions.deleteWorkflowRun({...options, run_id })))
+    //await Promise.all(deletedRuns.forEach( run_id => octokit.rest.actions.deleteWorkflowRun({...options, run_id })))
     core.setOutput('deleted-runs', JSON.stringify(deletedRuns));
     console.log('Output:', JSON.stringify(deletedRuns, null, 2));
   } catch (error) {
