@@ -7,8 +7,8 @@ on:
 jobs:
   delete-workflows:
     name: Delete old workflow runs
-    permissions:
-      actions: write
+    # permissions:
+    #   actions: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
