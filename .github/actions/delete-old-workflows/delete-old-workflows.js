@@ -23,11 +23,13 @@ const deleteOldWorkflowsRuns = async () => {
     runs.forEach( run => {
       const {event, head_branch, id, path} = run;
       console.log('Run:', JSON.stringify({event, head_branch, id, path}, null, 2))
-      const alwaysKeep = head_branch == 'main' || event == 'release';
+      // DELETE IF 
+      // OLD WORKFLOW OR (non-main branch &* )
+      const isImportant = head_branch == 'main' || event == 'release';
       const hasPR = !pull_branches.includes(head_branch);
       const activeWorkflow = workflowPaths.includes(path);
 
-      if ( !(alwaysKeep || (hasPR && activeWorkflow)) ) {
+      if ( !activeWorkflow || (!isImportant && !hasPR)) {
         deletedWorkflows.push({id, event, head_branch, path})   }
 
     })
