@@ -26,7 +26,8 @@ const deleteOldWorkflowsRuns = async () => {
       const activeWorkflow = workflowPaths.includes(path);
 
       if ( !activeWorkflow || (!isImportant && !hasPR)) {
-        deletedRuns.push({id, event, head_branch, path})   }
+        deletedRuns.push(id) 
+      }
 
     })
     core.setOutput('deleted-runs', JSON.stringify(deletedRuns));
