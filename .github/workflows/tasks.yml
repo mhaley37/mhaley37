@@ -30,5 +30,6 @@ jobs:
           echo "value<<EOF" >> $GITHUB_OUTPUT
           echo '${{ steps.list.outputs.deled-runs }}' | jq -r '.[] | ."id"' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
-          echo testing: ${{ steps.list.outputs.deled-runs }} >> $GITHUB_OUTPUT
+          echo 'testing1 ${{ steps.list.outputs.deled-runs }}'
+          echo "testing2 ${{ steps.list.outputs.deled-runs }}"
         shell: bash
