@@ -22,3 +22,6 @@ jobs:
       - name: Delete old workflows
         id: list
         uses: ./.github/actions/delete-old-workflows
+        # TODO: CHECK OUT ACTION SPECIFIC AUTH STRATEGY
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}

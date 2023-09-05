@@ -3,7 +3,7 @@ const github = require('@actions/github');
 
 const deleteOldWorkflowsRuns = async () => {
   try {
-    const octokit = github.getOctokit('not_a_token')
+    const octokit = github.getOctokit(core.getInput('token', {required: true}))
     const { owner, repo } = github.context.repo;
     const common = {owner, repo}
     // Look at better aliases, like await octokit.pulls()
