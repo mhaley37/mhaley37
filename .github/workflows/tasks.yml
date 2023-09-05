@@ -28,5 +28,4 @@ jobs:
       - name: Display output
         run: |
           echo "cmon-man ${{ steps.list.outputs.deleted-runs }}"
-          echo 'testing ${{ steps.list.outputs.test }}'
         shell: bash
