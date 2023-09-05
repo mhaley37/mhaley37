@@ -1,4 +1,0 @@
-package.json
-some fake path
-yarn.lockasdfasdfa
-asdfasdfasdf

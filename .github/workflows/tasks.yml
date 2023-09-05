@@ -1,0 +1,15 @@
+name: Daily jobs
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  delete-workflows:
+    name: Delete old workflow runs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Delete old workflows
+        id: list
+        uses: ./.github/actions/delete-old-workflows
