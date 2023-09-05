@@ -5,33 +5,34 @@ const deleteOldWorkflowsRuns = async () => {
   try {
     const octokit = github.getOctokit(core.getInput('token', {required: true}))
     const { owner, repo } = github.context.repo;
-    const common = {owner, repo}
-    
-    const pulls = await octokit.rest.pulls.list(common)
-
-    const pull_branches = pulls.data.map( v => v.head.ref)
+    const options = {owner, repo}
+    const pull_branches = (await octokit.paginate(octokit.rest.pulls.list, options)).flat().map(v => v.head.ref)
     const workflows = await octokit.rest.repos.getContent({
-      ...common,
+      ...options,
       path: '.github/workflows'
-    })
+    });
     const workflowPaths = workflows.data.map( d => d.path );
-
-    const runs = (await octokit.paginate(octokit.rest.actions.listWorkflowRunsForRepo, common)).flat()
+    const runs = (await octokit.paginate(octokit.rest.actions.listWorkflowRunsForRepo, options)).flat()
 
     // TODO: Remove this
-    const deletedWorkflows = [];
+    const deletedRuns = [];
+    console.log('paths', JSON.stringify(workflowPaths))
+    console.log('prs', JSON.stringify(pull_branches))
     runs.forEach( run => {
       const {event, head_branch, id, path} = run;
-      const alwaysKeep = head_branch == 'main' || event == 'release';
-      const hasPR = !pull_branches.includes(head_branch);
+
+      const isImportant = head_branch == 'main' || event == 'release';
+      const hasPR = pull_branches.includes(head_branch);
       const activeWorkflow = workflowPaths.includes(path);
 
-      if ( !(alwaysKeep || (hasPR && activeWorkflow)) ) {
-        deletedWorkflows.push({id, event, head_branch, path})   }
+      if ( !activeWorkflow || (!isImportant && !hasPR)) {
+        deletedRuns.push(id) 
+      }
 
     })
-    core.setOutput('deleted-runs', JSON.stringify(deletedWorkflows));
-    console.log('Output:', JSON.stringify(deletedWorkflows, null, 2));
+    core.setOutput('deleted-runs', JSON.stringify(deletedRuns));
+    core.setOutput('test','This is a test message!ARR')
+    console.log('Output:', JSON.stringify(deletedRuns, null, 2));
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);

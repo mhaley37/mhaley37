@@ -19,9 +19,14 @@ jobs:
       - name: yarn
         run: yarn install
         shell: bash
-      - name: Delete old workflows
+      - name: Delete old workflow runs
         id: list
         uses: ./.github/actions/delete-old-workflows
         # TODO: CHECK OUT ACTION SPECIFIC AUTH STRATEGY
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Display output
+        run: |
+          echo "cmon-man ${{ steps.list.outputs.deleted-runs }}"
+          echo 'testing ${{ steps.list.outputs.test }}'
+        shell: bash
