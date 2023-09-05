@@ -1,0 +1,13 @@
+name: Delete Old Workflow Runs
+description: Deletes old GitHub Workflow runs that are no longer needed
+
+inputs:
+  token: 
+    description: A masked github token to make API requests
+    required: true
+outputs:
+  deleted-runs:
+    description: Array of objects each containing each run that was deleted
+runs:
+  using: node16
+  main: index.js

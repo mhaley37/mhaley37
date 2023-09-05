@@ -1,0 +1,27 @@
+name: Daily jobs
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  delete-workflows:
+    name: Delete old workflow runs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up node
+        uses: actions/setup-node@v3
+        with:
+          cache: yarn
+          check-latest: true
+          node-version: 16      
+      - name: yarn
+        run: yarn install
+        shell: bash
+      - name: Delete old workflows
+        id: list
+        uses: ./.github/actions/delete-old-workflows
+        # TODO: CHECK OUT ACTION SPECIFIC AUTH STRATEGY
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
