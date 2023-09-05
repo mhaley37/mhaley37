@@ -7,11 +7,11 @@ const deleteOldWorkflowsRuns = async () => {
     const { owner, repo } = github.context.repo;
     const options = {owner, repo}
     const pull_branches = (await octokit.paginate(octokit.rest.pulls.list, options)).flat().map(v => v.head.ref)
-    const workflows = await octokit.rest.repos.getContent({
+    const workflowPaths = (await octokit.rest.repos.getContent({
       ...options,
       path: '.github/workflows'
-    });
-    const workflowPaths = workflows.data.map( d => d.path );
+    })).data.map( d => d.path );
+    //const workflowPaths = workflows.data.map( d => d.path );
     const runs = (await octokit.paginate(octokit.rest.actions.listWorkflowRunsForRepo, options )).flat().filter( run => run.status !='in_progress')
     const deletedRuns = [];
     runs.forEach( run => {
@@ -20,7 +20,6 @@ const deleteOldWorkflowsRuns = async () => {
       const notImportant = head_branch != 'main' && event != 'release';
       const noOpenPR = !pull_branches.includes(head_branch);
       const oldWorkflow = !workflowPaths.includes(path);
-      console.log({id, noOpenPR, notImportant, oldWorkflow, path: run.path, branch: run.head_branch})
       if ( oldWorkflow || (notImportant && noOpenPR)) {
         deletedRuns.push(id) 
       }
