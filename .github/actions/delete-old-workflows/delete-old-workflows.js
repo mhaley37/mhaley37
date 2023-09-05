@@ -30,7 +30,7 @@ const deleteOldWorkflowsRuns = async () => {
       }
 
     })
-    core.setOutput('deleted-runs', JSON.stringify(deletedRuns));
+    core.setOutput('deleted-runs', 'bubba');
     core.setOutput('test','This is a test message')
     console.log('Output:', JSON.stringify(deletedRuns, null, 2));
   } catch (error) {
