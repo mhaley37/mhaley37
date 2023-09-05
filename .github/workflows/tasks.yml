@@ -27,5 +27,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Display output
         run: |
-          echo "Here are the runs: ${{ fromJson(steps.list.outputs.deleted-runs)}}"
+          echo "value<<EOF" >> $GITHUB_OUTPUT
+          echo '${{ steps.list.outputs.deled-runs }}' | jq -r '.[] | ."id"' >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT 
         shell: bash
