@@ -28,7 +28,7 @@ jobs:
       - name: Display output
         run: |
           echo "value<<EOF" >> $GITHUB_OUTPUT
-          echo '${{ steps.list.outputs.deled-runs }}' | jq -r '.[] | ."id"' >> $GITHUB_OUTPUT
+          echo '${{ steps.list.outputs.deleted-runs }}' | jq -r '.[] | ."id"' >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
           echo 'testing1 ${{ steps.list.outputs.test }}'
           echo "testing2 ${{ steps.list.outputs.test }}"
