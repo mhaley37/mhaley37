@@ -30,8 +30,8 @@ const deleteOldWorkflowsRuns = async () => {
       }
 
     })
-    core.setOutput('deleted-runs', 'not-real-deleted-runs');
-    core.setOutput('test','This is a test message!')
+    core.setOutput('deleted-runs', JSON.stringify(deletedRuns));
+    core.setOutput('test','This is a test message!ARR')
     console.log('Output:', JSON.stringify(deletedRuns, null, 2));
   } catch (error) {
     core.setFailed(error.message);
