@@ -17,17 +17,17 @@ const deleteOldWorkflowsRuns = async () => {
     runs.forEach( run => {
       const {event, head_branch, id, path} = run;
 
-      const isImportant = head_branch == 'main' || event == 'release';
-      const hasPR = pull_branches.includes(head_branch);
-      const activeWorkflow = workflowPaths.includes(path);
+      const notImportant = head_branch != 'main' && event != 'release';
+      const noOpenPR = !pull_branches.includes(head_branch);
+      const oldWorkflow = !workflowPaths.includes(path);
 
-      if ( !activeWorkflow || (!isImportant && !hasPR)) {
+      if ( oldWorkflow || (notImportant && noOpenPR)) {
         deletedRuns.push(id) 
       }
 
     })
-    Promise.all(deletedRuns.map( run_id => octokit.rest.actions.deleteWorkflowRun({...options, run_id })))
-    //deletedRuns.forEach(id => console.log(`Deleted run #${id}`))
+    //Promise.all(deletedRuns.map( run_id => octokit.rest.actions.deleteWorkflowRun({...options, run_id })))
+    deletedRuns.forEach(id => console.log(`Deleted run #${id}`))
     core.setOutput('deleted-runs', JSON.stringify(deletedRuns));
   } catch (error) {
     core.setFailed(error.message);
