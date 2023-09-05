@@ -7,8 +7,6 @@ on:
 jobs:
   delete-workflows:
     name: Delete old workflow runs
-    # permissions:
-    #   actions: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -26,7 +24,7 @@ jobs:
         uses: ./.github/actions/delete-old-workflows
         # TODO: CHECK OUT ACTION SPECIFIC AUTH STRATEGY
         with:
-          token: ${{ secrets.MIKE_PAT }}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Display output
         run: |
           echo "cmon-man ${{ steps.list.outputs.deleted-runs }}"
