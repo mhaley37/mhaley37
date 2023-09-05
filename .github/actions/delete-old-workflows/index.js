@@ -1,3 +1,3 @@
-const { deleteOldWorkflowRuns } = require('./delete-old-workflows');
+const { deleteOldWorkflowsRuns } = require('./delete-old-workflows');
 
-deleteOldWorkflowRuns();
+deleteOldWorkflowsRuns();

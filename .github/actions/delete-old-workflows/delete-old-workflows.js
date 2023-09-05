@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-const deleteOldWorkflows = async () => {
+const deleteOldWorkflowsRuns = async () => {
   try {
     const octokit = github.getOctokit('not_a_token')
     const { owner, repo } = github.context.repo;
@@ -42,4 +42,4 @@ const deleteOldWorkflows = async () => {
   }
 }
 
-module.exports = { deleteOldWorkflows };
+module.exports = { deleteOldWorkflowsRuns };
