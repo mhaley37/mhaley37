@@ -27,7 +27,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
       - name: Display output
         run: |
-          echo "value ${{ steps.list.outputs.test.deleted-runs }}"
+          echo "c'mon ${{ steps.list.outputs.deleted-runs }}"
           echo 'testing1 ${{ steps.list.outputs.test }}'
           echo "testing2 ${{ steps.list.outputs.test }}"
         shell: bash
