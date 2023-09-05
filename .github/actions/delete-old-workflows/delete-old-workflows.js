@@ -9,11 +9,11 @@ const deleteOldWorkflowsRuns = async () => {
     
     const pull_branches = (await octokit.paginate(octokit.rest.pulls.list, common)).flat().map(v => v.head.ref)
     //const pull_branches = pulls.data.map( v => v.head.ref)
-    const workflowPaths = await octokit.rest.repos.getContent({
+    const workflows = await octokit.rest.repos.getContent({
       ...common,
       path: '.github/workflows'
-    }).data.map( d => d.path );
-    //const workflowPaths = workflows.data.map( d => d.path );
+    });
+    const workflowPaths = workflows.data.map( d => d.path );
 
     const runs = (await octokit.paginate(octokit.rest.actions.listWorkflowRunsForRepo, common)).flat()
 
