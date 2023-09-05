@@ -19,13 +19,11 @@ const deleteOldWorkflowsRuns = async () => {
     })
     const workflowPaths = workflows.data.map( d => d.path );
 
-    const runs = (await octokit.paginate('GET /repos/{owner}/{repo}/actions/runs', {
-      ...common, 
-    })).flat()
+    const runs = (await octokit.paginate(octokit.rest.actions.listWorkflowRunsForRepo, common)).flat()
 
     // TODO: Remove this
     const deletedWorkflows = [];
-    runs.foreach( run => {
+    runs.forEach( run => {
       const alwaysKeep = branch == 'main' || eventType == 'release';
       const hasPR = !pull_branches.includes(branch);
       const activeWorkflow = workflowPaths.includes(path);
