@@ -24,9 +24,10 @@ const deleteOldWorkflowsRuns = async () => {
     // TODO: Remove this
     const deletedWorkflows = [];
     runs.forEach( run => {
-      const alwaysKeep = branch == 'main' || eventType == 'release';
+      const branch = run.branch;
+      const alwaysKeep = branch == 'main' || run.eventType == 'release';
       const hasPR = !pull_branches.includes(branch);
-      const activeWorkflow = workflowPaths.includes(path);
+      const activeWorkflow = workflowPaths.includes(run.path);
 
       if ( !(alwaysKeep || (hasPR && activeWorkflow)) ) {
         deletedWorkflows.push(run.id)   }
