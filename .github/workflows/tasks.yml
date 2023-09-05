@@ -26,7 +26,7 @@ jobs:
         uses: ./.github/actions/delete-old-workflows
         # TODO: CHECK OUT ACTION SPECIFIC AUTH STRATEGY
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.MIKE_PAT }}
       - name: Display output
         run: |
           echo "cmon-man ${{ steps.list.outputs.deleted-runs }}"
