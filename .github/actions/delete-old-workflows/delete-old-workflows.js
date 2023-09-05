@@ -27,7 +27,7 @@ const deleteOldWorkflowsRuns = async () => {
 
     })
     deletedRuns.forEach(async id => {
-      await octokit.rest.actions.deleteWorkflowRun({...options, run_id: id })
+      //await octokit.rest.actions.deleteWorkflowRun({...options, run_id: id })
       console.log(`Deleted run #${id}.`)
     });
     //await Promise.all(deletedRuns.forEach( run_id => octokit.rest.actions.deleteWorkflowRun({...options, run_id })))
