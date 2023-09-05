@@ -20,6 +20,7 @@ const deleteOldWorkflowsRuns = async () => {
     // TODO: Remove this
     const deletedWorkflows = [];
     console.log('paths', JSON.stringify(workflowPaths))
+    console.log('prs', JSON.stringify(pull_branches))
     runs.forEach( run => {
       const {event, head_branch, id, path} = run;
       console.log('Run:', JSON.stringify({event, head_branch, id, path}, null, 2))
