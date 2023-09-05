@@ -6,9 +6,8 @@ const deleteOldWorkflowsRuns = async () => {
     const octokit = github.getOctokit(core.getInput('token', {required: true}))
     const { owner, repo } = github.context.repo;
     const common = {owner, repo}
-    
     const pull_branches = (await octokit.paginate(octokit.rest.pulls.list, common)).flat().map(v => v.head.ref)
-    //const pull_branches = pulls.data.map( v => v.head.ref)
+    console.log('pr-branches:', JSON.stringify(pull_branches))
     const workflows = await octokit.rest.repos.getContent({
       ...common,
       path: '.github/workflows'
