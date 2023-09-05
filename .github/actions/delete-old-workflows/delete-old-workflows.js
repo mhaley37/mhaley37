@@ -5,16 +5,15 @@ const deleteOldWorkflowsRuns = async () => {
   try {
     const octokit = github.getOctokit(core.getInput('token', {required: true}))
     const { owner, repo } = github.context.repo;
-    const common = {owner, repo}
-    const pull_branches = (await octokit.paginate(octokit.rest.pulls.list, common)).flat().map(v => v.head.ref)
-    console.log('pr-branches:', JSON.stringify(pull_branches))
+    const options = {owner, repo}
+    const pull_branches = (await octokit.paginate(octokit.rest.pulls.list, options)).flat().map(v => v.head.ref)
     const workflows = await octokit.rest.repos.getContent({
-      ...common,
+      ...options,
       path: '.github/workflows'
     });
     const workflowPaths = workflows.data.map( d => d.path );
 
-    const runs = (await octokit.paginate(octokit.rest.actions.listWorkflowRunsForRepo, common)).flat()
+    const runs = (await octokit.paginate(octokit.rest.actions.listWorkflowRunsForRepo, options)).flat()
 
     // TODO: Remove this
     const deletedWorkflows = [];
@@ -23,10 +22,9 @@ const deleteOldWorkflowsRuns = async () => {
     runs.forEach( run => {
       const {event, head_branch, id, path} = run;
       console.log('Run:', JSON.stringify({event, head_branch, id, path}, null, 2))
-      // DELETE IF 
-      // OLD WORKFLOW OR (non-main branch &* )
+
       const isImportant = head_branch == 'main' || event == 'release';
-      const hasPR = !pull_branches.includes(head_branch);
+      const hasPR = pull_branches.includes(head_branch);
       const activeWorkflow = workflowPaths.includes(path);
 
       if ( !activeWorkflow || (!isImportant && !hasPR)) {
