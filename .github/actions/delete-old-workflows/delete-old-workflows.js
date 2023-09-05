@@ -1,19 +1,9 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 
-
-
-const appendToFile = (file, line) => {
-  fs.appendFile(`logs/${file}`, line, err => {
-    if (err) {
-      console.log(err)
-    }
-  })
-}
-
 export const deleteOldWorkflows = async () => {
   try {
-    const octokit = github.getOctokit('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')
+    const octokit = github.getOctokit('not_a_token')
     const { owner, repo } = github.context.repo;
     const common = {owner, repo}
     // Look at better aliases, like await octokit.pulls()
