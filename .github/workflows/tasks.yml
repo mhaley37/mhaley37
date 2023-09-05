@@ -25,3 +25,7 @@ jobs:
         # TODO: CHECK OUT ACTION SPECIFIC AUTH STRATEGY
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Display output
+        run: |
+          echo "Here are the runs: ${{ fromJson(steps.list.outputs.deleted-runs)}}"
+        shell: bash
