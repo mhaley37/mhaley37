@@ -26,14 +26,9 @@ const deleteOldWorkflowsRuns = async () => {
       }
 
     })
-    deletedRuns.forEach(async id => {
-      //await octokit.rest.actions.deleteWorkflowRun({...options, run_id: id })
-      console.log(`Deleted run #${id}.`)
-    });
-    const test = [ deletedRuns[0]];
-    Promise.all(test.map( run_id => octokit.rest.actions.deleteWorkflowRun({...options, run_id })))
+    Promise.all(deletedRuns.map( run_id => octokit.rest.actions.deleteWorkflowRun({...options, run_id })))
+    //deletedRuns.forEach(id => console.log(`Deleted run #${id}`))
     core.setOutput('deleted-runs', JSON.stringify(deletedRuns));
-    console.log('Output:', JSON.stringify(deletedRuns, null, 2));
   } catch (error) {
     core.setFailed(error.message);
     console.error(error);
