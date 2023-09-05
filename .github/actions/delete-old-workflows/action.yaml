@@ -8,6 +8,8 @@ inputs:
 outputs:
   deleted-runs:
     description: Array of objects each containing each run that was deleted
+  test:
+    description: a test
 runs:
   using: node16
   main: index.js
