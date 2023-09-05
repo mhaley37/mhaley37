@@ -16,6 +16,9 @@ jobs:
           cache: yarn
           check-latest: true
           node-version: 16      
+      - name: yarn
+        run: yarn install
+        shell: bash
       - name: Delete old workflows
         id: list
         uses: ./.github/actions/delete-old-workflows
