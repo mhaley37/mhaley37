@@ -1,0 +1,108 @@
+const assert = require('node:assert');
+const core = require('@actions/core');
+const github = require('@actions/github');
+const { Octokit } = require('octokit');
+const sinon = require('sinon');
+const test = require('test');
+const { deleteOldWorkflowsRuns } = require('./delete-old-workflows').default;
+
+const OLD_BRANCH = 'OLD_BRANCH'
+const MAIN_BRANCH = 'MAIN_BRANCH'
+
+const ACTIVE_PATH = 'active/workflow/path'
+const OLD_PATH = 'old/workflow/path'
+const setup = () => {
+
+  const runsToDelete = [
+  {
+    id: 2,
+    head_branch: OLD_BRANCH,
+    path: ACTIVE_PATH,
+    event: 'push'
+  },
+  {
+    id: 93,
+    head_branch: OLD_BRANCH,
+    path: OLD_PATH,
+    event: 'push'
+  },  
+]
+
+  const runsToKeep = [{
+    id: 1,
+    head_branch: MAIN_BRANCH,
+    path: ACTIVE_PATH,
+    event: 'push'
+  },
+  {
+    id: 2,
+    head_branch: OLD_BRANCH,
+    path: ACTIVE_PATH,
+    event: 'push'
+  },
+  {
+    id: 3,
+    head_branch: OLD_BRANCH,
+    path: ACTIVE_PATH,
+    event: 'release'
+  },  
+]
+  const spies = {
+    console: { log: sinon.spy(console, 'log') },
+    core: { setOutput: sinon.spy(core, 'setOutput') },
+  };
+  const stubs = {
+    core: { getInput: sinon.stub(core, 'getInput') },
+    github: { context: sinon.stub(github, 'context'),
+              getOctokit: sinon.stub(github, 'getOctokit')}
+  };
+
+  const OCTOKIT_MOCK = {
+    paginate: (value) => [value],
+    rest: {
+      pulls: {
+        list: [1, 2, 3]
+      }
+    }
+  }
+
+  stubs.github.getOctokit.returns(OCTOKIT_MOCK)
+  stubs.core.getInput.withArgs('token').returns('GOOD_TOKEN')
+
+  stubs.github.context.value({
+    repo: { owner: 'foo-owner', repo: 'bar-repo' },
+  });
+
+  return { spies };
+};
+
+const assertions = args => {
+  assert(
+    args.spies.core.setOutput.calledWith('deleted-runs', JSON.stringify(args.runIds)),
+  );
+  assert(
+    args.spies.console.log.calledWith(
+      'Output:',
+      JSON.stringify(args.runIds, null, 2),
+    ),
+  );
+};
+
+const cleanup = spies => {
+  spies.console.log.restore();
+  spies.core.setOutput.restore();
+  sinon.restore();
+};
+
+test('Get deletes run ids', async () => {
+  const { spies } = setup();
+
+  await deleteOldWorkflowsRuns();
+
+  assertions({
+    spies,
+    runIds: [1,2,3]
+  });
+
+  cleanup(spies);
+});
