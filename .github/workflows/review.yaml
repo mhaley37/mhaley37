@@ -16,19 +16,7 @@ jobs:
       - name: setup
         id: get-repo-name
         run: echo "name=$(echo ${{ github.repository }} | cut -d '/' -f 2 )" >> "$GITHUB_OUTPUT"
-      - uses: octokit/request-action@v2.1.0
-        id: get_latest_release
-        with:
-          route: /repos/{owner}/{repo}/pulls/{pull_number}/reviews
-          #owner: ${{ github.repository_owner }}
-          #repo: ${{ steps.get-repo-name.outputs.name }}
-          #pull_number: ${{ github.event.pull_request.number }}
-          owner: department-of-veterans-affairs
-          repo: lighthouse-developer-portal
-          pull_number: 2140        
-        env:
-          GITHUB_TOKEN: ${{ secrets.SUPER_TOKEN }}
-      - run: "echo PR data!: '${{ steps.get_latest_release.outputs.data }}'"
+
       - uses: octokit/graphql-action@v2.x
         id: count-approved-reviews
         with:
@@ -43,6 +31,9 @@ jobs:
               }
             }
           # TODO: Check this, might have issue with pr number being a string
+          #owner: ${{ github.event.repository.owner.name }}
+          #repo: ${{ steps.get-repo-name.outputs.name }} or ${{ github.event.repository.name.}}
+          #number: ${{ github.event.pull_request.number }}          
           variables: |
             owner: department-of-veterans-affairs
             repo: lighthouse-developer-portal
