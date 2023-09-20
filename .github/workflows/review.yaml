@@ -11,16 +11,13 @@ jobs:
     outputs:
       should-run: "false"
     steps:
-      - name: check
+      - name: setup
+        id: get-repo-name
         run: |
-          echo "Checking stuff about PR, id: ${{ github.event.pull_request.number }}"
-          echo "Checking to see if should run these checks"
-      - run: |
           echo name is ${{ github.repository }}
           echo "town=pembroke" >> "$GITHUB_OUTPUT"
           echo "name=${{ github.repository }}" >> "$GITHUB_OUTPUT"
-          echo "name2=${{ github.repository }} | cut -d '/' -f 2 " >> "$GITHUB_OUTPUT"
-        id: get-repo-name
+          echo "name2=${${{ github.repository }} | cut -d '/' -f 2 }" >> "$GITHUB_OUTPUT"
       - run: |
           echo ${{ steps.get-repo-name.output.town }}
           echo ${{ steps.get-repo-name.output.name }}
@@ -30,7 +27,7 @@ jobs:
         with:
           route: /repos/{owner}/{repo}/pulls/{pull_number}
           owner: ${{ github.repository_owner }}
-          repo: ${{ steps.get-repo-name.output.name }}
+          repo: ${{ steps.get-repo-name.outputs.name2 }}
           pull_number: ${{ github.event.pull_request.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
