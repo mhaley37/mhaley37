@@ -2,13 +2,24 @@ name: Review workflow
 
 on:
   pull_request_review:
-    branches: [main]
   workflow_dispatch:
 
 jobs:
+  should-run:
+    name: Check if should run
+    runs-on: ubuntu-latest
+    outputs:
+      should-run: false
+    steps:
+      - name: check
+        run: |
+          echo "Checking to see if should run these checks"
+          
   echo:
     name: Echo review check
+    needs: [should-run]
     runs-on: ubuntu-latest
+    if: needs.should-run.outputs.should-run
     steps:
       - uses: actions/checkout@v3
       - name: echo
