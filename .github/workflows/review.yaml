@@ -33,7 +33,7 @@ jobs:
         id: count-approved-reviews
         with:
           query: |
-            query($owner:String!,$repo:$String!,$number:Int!) {
+            query($owner:String!,$repo:String!,$number:Int!) {
               repository(owner:$owner,name: $repo) {
                 pullRequest(number:$number) {
                   reviews(states:APPROVED) {
