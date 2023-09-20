@@ -15,12 +15,14 @@ jobs:
         run: |
           echo "Checking stuff about PR, id: ${{ github.event.pull_request.number }}"
           echo "Checking to see if should run these checks"
+      - run: echo "name=${{ github.repository }} | cut -d '/' -f 2 " >> "$GITHUB_OUTPUT"
+        id: get-repo-name
       - uses: octokit/request-action@v2.1.0
         id: get_latest_release
         with:
           route: /repos/{owner}/{repo}/pulls/{pull_number}
           owner: ${{ github.repository_owner }}
-          repo: ${{ github.repository }}
+          repo: ${{ steps.get-repo-name.output.name }}
           pull_number: ${{ github.event.pull_request.number }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
