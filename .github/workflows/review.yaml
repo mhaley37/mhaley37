@@ -17,7 +17,7 @@ jobs:
           echo name is ${{ github.repository }}
           echo "town=pembroke" >> "$GITHUB_OUTPUT"
           echo "name=${{ github.repository }}" >> "$GITHUB_OUTPUT"
-          echo "name2=${echo ${{ github.repository }} | cut -d '/' -f 2 }" >> "$GITHUB_OUTPUT"
+          echo "name2=${echo '${{ github.repository }}' | cut -d '/' -f 2 }" >> "$GITHUB_OUTPUT"
       - run: |
           echo ${{ steps.get-repo-name.output.town }}
           echo ${{ steps.get-repo-name.output.name }}
