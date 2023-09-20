@@ -1,0 +1,15 @@
+name: Review workflow
+
+on:
+  pull_request_review:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  do-stuff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: echo
+        run: |
+          echo "Hello, a PR review just happened!"
