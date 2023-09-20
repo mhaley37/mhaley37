@@ -1,6 +1,8 @@
 name: Review workflow
 
 on:
+  # TODO: Remove
+  push:
   pull_request_review:
   workflow_dispatch:
 
@@ -30,9 +32,6 @@ jobs:
       - uses: octokit/graphql-action@v2.x
         id: count-approved-reviews
         with:
-          owner: department-of-veterans-affairs
-          repo: lighthouse-developer-portal
-          pr-number: 2140
           query: |
             query($name: String!, $owner: String!, $number: Int!) {
               repository(owner: $owner, name: $name) {
@@ -43,6 +42,11 @@ jobs:
                 }
               }
             }
+          # TODO: Check this, might have issue with pr number being a string
+          variables: |
+            owner: department-of-veterans-affairs
+            repo: lighthouse-developer-portal
+            number: 2140
         env:
           GITHUB_TOKEN: ${{ secrets.SUPER_TOKEN }}
       - run: "echo graphql data: '${{ steps.count-approved-reviews.outputs.data }}'"          
