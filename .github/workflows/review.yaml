@@ -40,7 +40,7 @@ jobs:
             number: 2140
         env:
           GITHUB_TOKEN: ${{ secrets.SUPER_TOKEN }}
-      - run: "echo graphql data: '${{ steps.count-approved-reviews.outputs.data }}'"          
+      - run: "Total approvals: '${{ fromJson(steps.count-approved-reviews.outputs.data.repository.pullRequest.reviews.totalCount) }}'"          
           
   echo:
     name: Echo review check
