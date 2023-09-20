@@ -11,7 +11,7 @@ jobs:
     name: Check if should run
     runs-on: ubuntu-latest
     outputs:
-      should-run: "false"
+      should-run: ${{ fromJson(steps.count-approved-reviews.outputs.data).repository.pullRequest.reviews.totalCount >= 3}}
     steps:
       - name: setup
         id: get-repo-name
@@ -41,13 +41,23 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.SUPER_TOKEN }}
       - run: "echo ${{ fromJson(steps.count-approved-reviews.outputs.data).repository.pullRequest.reviews.totalCount }}"
-  echo:
-    name: Echo review check
+  
+  deploy-to-dev:
+    name: Deploy to dev
     needs: [should-run]
     runs-on: ubuntu-latest
     if: fromJson(needs.should-run.outputs.should-run)
     steps:
-      - uses: actions/checkout@v3
+      - name: echo
+        run: |
+          echo "Hello, a PR review just happened!"
+
+  run-e2e-tests:
+    name: Run E2E tests against dev
+    needs: [should-run, deploy-to-dev]
+    runs-on: ubuntu-latest
+    if:  fromJson(needs.should-run.outputs.should-run)
+    steps:
       - name: echo
         run: |
           echo "Hello, a PR review just happened!"
