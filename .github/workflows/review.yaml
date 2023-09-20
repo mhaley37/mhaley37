@@ -27,6 +27,25 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.SUPER_TOKEN }}
       - run: "echo PR data!: '${{ steps.get_latest_release.outputs.data }}'"
+      - uses: octokit/graphql-action@v2.x
+        id: count-approved-reviews
+        with:
+          owner: department-of-veterans-affairs
+          repo: lighthouse-developer-portal
+          pr-number: 2140
+          query: |
+            query($name: String!, $owner: String!, $number: Int!) {
+              repository(owner: $owner, name: $name) {
+                pullRequest(number: $number) {
+                  reviews(states:APPROVED) {
+                    totalCount
+                  }
+                }
+              }
+            }
+        env:
+          GITHUB_TOKEN: ${{ secrets.SUPER_TOKEN }}
+      - run: "echo graphql data: '${{ steps.count-approved-reviews.outputs.data }}'"          
           
   echo:
     name: Echo review check
