@@ -9,7 +9,7 @@ jobs:
     name: Check if should run
     runs-on: ubuntu-latest
     outputs:
-      should-run: false
+      should-run: "false"
     steps:
       - name: check
         run: |
@@ -19,7 +19,7 @@ jobs:
     name: Echo review check
     needs: [should-run]
     runs-on: ubuntu-latest
-    if: needs.should-run.outputs.should-run
+    if: fromJson(needs.should-run.outputs.should-run)
     steps:
       - uses: actions/checkout@v3
       - name: echo
