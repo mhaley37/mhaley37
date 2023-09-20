@@ -33,9 +33,9 @@ jobs:
         id: count-approved-reviews
         with:
           query: |
-            query($name: String!, $owner: String!, $number: Int!) {
-              repository(owner: $owner, name: $name) {
-                pullRequest(number: $number) {
+            query($owner:String!,$repo:$String!,$number:Int!) {
+              repository(owner:$owner,name: $repo) {
+                pullRequest(number:$number) {
                   reviews(states:APPROVED) {
                     totalCount
                   }
