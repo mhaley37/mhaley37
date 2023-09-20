@@ -15,7 +15,7 @@ jobs:
         run: |
           echo "Checking stuff about PR, id: ${{ github.event.pull_request.number }}"
           echo "Checking to see if should run these checks"
-      - uses: octokit/request-action@v2.x
+      - uses: octokit/request-action@v2.1.0
         id: get_latest_release
         with:
           route: /repos/{owner}/{repo}/pulls/{pull_number}
