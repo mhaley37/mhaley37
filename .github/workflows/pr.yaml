@@ -1,0 +1,15 @@
+name: PR workflow
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  do-stuff:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: echo
+        run: |
+          echo "Hello, pull request just happened!"
