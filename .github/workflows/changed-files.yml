@@ -16,7 +16,9 @@ jobs:
         shell: bash
       - name: echo
         shell: bash
-        run: echo "${{ steps.time.outputs.curr-date }}"
+        run: |
+          echo "The date is=${{ steps.time.outputs.curr-date }}"
+          echo "And another date is"
       - name: some-step
         run: |
           cat mike-haley
