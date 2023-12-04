@@ -10,6 +10,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+      - name: time-step
+        id: time
+        run: echo "curr-date=$(date +'%m/%d/%Y')"
+        shell: bash
+      - name: echo
+        shell: bash
+        run: echo "${{ steps.time.outputs.curr-date }}"
       - name: some-step
         run: |
           cat mike-haley
