@@ -12,7 +12,7 @@ jobs:
 
       - name: time-step
         id: time
-        run: echo "curr-date=today"
+        run: echo "curr-date=$(date +'%m/%d/%Y')" >> $GITHUB_OUTPUT
         shell: bash
       - name: echo
         shell: bash
