@@ -11,43 +11,38 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: cat
+      - name: Hydrate issue template
         id: hydrate
-        run: >
-          cat ./body-template.md | sed -e 's/\b\_\_/${/g' -e 's/\_\_\b/}/g' | envsubst
-        shell: bash
-      - name: Hydrate Template
-        id: hydrate-2
         env:
           # Later, we'll derive these from input variables
           environment: ldx-prod (DI)
           proposed_end_date_time: 2023/11/21 12:30
           proposed_start_date_time: 2023/11/21 12:15
           SLA_IMPACTS: SOME-IMPACTS
-          # MAINTENANCE_SEE_AFTER: |
-          #   1. CHECK THIS
-          #   2. CHECK THAT
-          #   3. CHECK AGAIN
-          # USERS_SEE_AFTER: SEE STUF
-          # DEPLOYMENT_STEPS: |
-          #   1. DRINK TOO MUCH COFFEE
-          #   2. CLOSE EYES & HIT DEPLOY
-          #   3. IMMEDIETELY FLEE AREA
-          # POST_DEPLOYMENT_VERIFICATION_STEPS: |
-          #   1. CALL IN SICK
-          #   2. CALL IN DEAD
-          # ROLLBACK_STEPS: |
-          #   1. BREAK GLASS (EMERGENCY)
-          #   2. YELL AT WHOMEVER COMES ACROSS YOUR PATH
-        run: >
-          echo "BODY=$(cat ./body-template.md |
-          's/\b\_\_/${/g' |
-          's/\_\_\b/}/g' |
-          envsubst)" >> $GITHUB_OUTPUT
+          MAINTENANCE_SEE_AFTER: |
+            1. CHECK THIS
+            2. CHECK THAT
+            3. CHECK AGAIN
+          USERS_SEE_AFTER: SEE STUF
+          DEPLOYMENT_STEPS: |
+            1. DRINK TOO MUCH COFFEE
+            2. CLOSE EYES & HIT DEPLOY
+            3. IMMEDIETELY FLEE AREA
+          POST_DEPLOYMENT_VERIFICATION_STEPS: |
+            1. CALL IN SICK
+            2. CALL IN DEAD
+          ROLLBACK_STEPS: |
+            1. BREAK GLASS (EMERGENCY)
+            2. YELL AT WHOMEVER COMES ACROSS YOUR PATH        
+        run: |
+          body=$(cat ./body-template.md | sed -e 's/\b\_\_/${/g' -e 's/\_\_\b/}/g' | envsubst)
+          echo "value<<EOF" >> $GITHUB_OUTPUT
+          echo "$body" >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT          
         shell: bash
       - name: Echo the body
         run: |
-          echo ${{ steps.hydrate.outputs.BODY }}
+          echo "${{ steps.hydrate.outputs.value }}"
         shell: bash
         # See https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
       # - name: Create GH Issue
