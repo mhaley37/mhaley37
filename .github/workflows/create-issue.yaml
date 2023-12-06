@@ -40,11 +40,14 @@ jobs:
           echo "$body" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT          
         shell: bash
-      - name: Echo the body
-        run: |
-          echo "${{ steps.hydrate.outputs.value }}"
+      - name: Create the issue
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: create-issue
+        run: >
+          gh api /repos/${{ github.repository }}/issues
+          --method POST
+          -f title='[MR] Promote Lighthouse Hub 23.11.2 to Production (2023/11/21 12:15 EST)'
+          -f body='${{ steps.hydrate.outputs.value }}'
+          -f "assignees[]=mhaley37"
         shell: bash
-        # See https://docs.github.com/en/rest/issues/issues?apiVersion=2022-11-28#create-an-issue
-      # - name: Create GH Issue
-      #   run: TBD
-      #   shell: bash
