@@ -30,21 +30,18 @@ runs:
       uses: actions/checkout@v4
     - name: Setup ENV values
       env:
-        # TODO: Testing only, set to America/New_York
-        TZ: America/Los_Angeles
+        TZ: America/New_York
       run: |
         if [[ $(date +%H) < 10 ]]
         then
-          echo "Will move before 10!"
-          START_TIME="$(date +%F) 14:00 ET"
-          END_TIME="$(date +%F) 14:30 ET"
+          DATE=$(date +%F)
+          HOUR=14
         else
-          echo "Will move tomorrow!"
-          START_TIME="$(date -d "tomorrow" +%F) 10:00"
-          END_TIME="$(date -d "tomorrow" +%F) 13:00"
+          DATE=$(date -d "tomorrow" +%F)
+          HOUR=10
         fi
-        echo "proposed_end_date_time=${END_TIME}" >> $GITHUB_ENV
-        echo "proposed_start_date_time=${START_TIME}" >> $GITHUB_ENV
+        echo "proposed_end_date_time=${DATE} ${HOUR}:00" >> $GITHUB_ENV
+        echo "proposed_start_date_time=${DATE} ${HOUR}:30" >> $GITHUB_ENV
         echo "NEW_VERSION=${{ inputs.new-version}}" >> $GITHUB_ENV
         echo "OLD_VERSION=${{ inputs.old-version}}" >> $GITHUB_ENV
       shell: bash
