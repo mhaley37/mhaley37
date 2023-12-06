@@ -12,8 +12,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create issue
+        id: create-issue
         uses: './.github/actions/create-maintenance-request'
         with:
-          gh-token: ${{ github.token}}
+          gh-token: ${{ github.token }}
           new-version: '23.12.4'
           old-version: '23.11.2'
+      - name: Echo results
+        run: |
+          echo New Issues Created, number ${{ steps.create-issue.outputs.issue-number }}
+          echo The URL is ${{ steps.create-issue.outputs.url }}

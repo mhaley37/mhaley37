@@ -12,6 +12,14 @@ inputs:
   new-version:
     required: true
     description: The version of the app to deploy to production
+outputs:
+  issue-number:
+    description: The number of the issue created
+    value: ${{ steps.create-issue.outputs.data && fromJson(steps.create-issue.outputs.data).number }}
+  url: 
+    description: The URL to the issue
+    value: ${{ steps.create-issue.outputs.data && fromJson(steps.create-issue.outputs.data).url }}
+
 
 runs:
   using: composite
@@ -35,19 +43,25 @@ runs:
         echo "$body" >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT          
       shell: bash 
-    - name: Create the issue
+    # This action needs parmeters to be specified in very exact ways, see https://github.com/marketplace/actions/github-api-request#inputs
+    - name: Create Maintenance Request Issue
+      uses: octokit/request-action@v2.x
+      id: create-issue
+      with:
+        route: POST /repos/{owner}/{repo}/issues
+        owner: mhaley37
+        repo: mhaley37
+        assignees: '[mhaley37]'
+        labels: '[lhdi,maintenance-request]'
+        body: |
+          |
+          ${{ steps.hydrate-template-body.outputs.value }}
+        # A string starting with `[ is treated special so need to break it out like this 
+        title: |
+          |
+          [MR] Promote Lighthouse Hub ${{ env.NEW_VERSION }} to Production (${{ env.proposed_start_date_time }} EST)          
       env:
         GITHUB_TOKEN: ${{ inputs.gh-token }}
-      id: create-issue
-      # Eventually add following (warning, they WILL start getting notifications if this is done!)
-      # -f "assignees[]=sbair-va"
-      # -f "assignees[]=beaugrantham-va"
-      run: >
-        gh api /repos/${{ github.repository }}/issues
-        --method POST
-        -f title='[MR] Promote Lighthouse Hub ${{ env.NEW_VERSION }} to Production (${{ env.proposed_start_date_time }} EST)'
-        -f body='${{ steps.hydrate.outputs.value }}'
-        -f "assignees[]=mhaley37"
-        -f "labels[]=lhdi"        
-        -f "labels[]=maintenance-request"
+    - run: "echo Release found: '${{ steps.create-issue.outputs.data }}'"
+      name: see results
       shell: bash
