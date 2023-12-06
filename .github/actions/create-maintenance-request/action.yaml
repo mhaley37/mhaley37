@@ -38,6 +38,7 @@ runs:
           echo "Will move before 10!"
           start-time="$(date +%F) 14:00 ET"
           end-time="$(date +%F) 14:30 ET"
+          echo "will move on ${start-time}"
         else
           echo "Will move tomorrow!"
           start-time="$(date -d "tomorrow" +%F) 10:00"
