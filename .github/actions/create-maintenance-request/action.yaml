@@ -36,8 +36,8 @@ runs:
         if [[ $(date +%H) < 10 ]]
         then
           echo "Will move before 10!"
-          start-time="$(date + %F) 14:00 ET"
-          end-time="$(date + %F) 14:30 ET"
+          start-time="$(date +%F) 14:00 ET"
+          end-time="$(date +%F) 14:30 ET"
         else
           echo "Will move tomorrow!"
           start-time="$(date -d "tomorrow" +%F) 10:00"
