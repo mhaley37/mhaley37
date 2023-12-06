@@ -30,7 +30,7 @@ runs:
       uses: actions/checkout@v4
     - name: Setup ENV values
       env:
-        TZ: America/New_York
+        TZ: America/Los_Angeles
       run: |
         if [[ $(date +%H) < 10 ]]
         then
