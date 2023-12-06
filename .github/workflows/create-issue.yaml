@@ -15,3 +15,5 @@ jobs:
         uses: './.github/actions/create-maintenance-request'
         with:
           gh-token: ${{ github.token}}
+          new-version: '23.12.4'
+          old-version: '23.11.2'
