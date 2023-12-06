@@ -28,13 +28,13 @@ runs:
         echo "OLD_VERSION=${{ inputs.old-version}}" >> $GITHUB_ENV
       shell: bash
     - name: Hydrate issue template 
-      id: hydrate
+      id: hydrate-template-body
       run: |
         body=$(cat ./.github/actions/create-maintenance-request/mr-body-template.md | sed -e 's/\b\_\_/${/g' -e 's/\_\_\b/}/g' | envsubst)
         echo "value<<EOF" >> $GITHUB_OUTPUT
         echo "$body" >> $GITHUB_OUTPUT
         echo "EOF" >> $GITHUB_OUTPUT          
-      shell: bash
+      shell: bash 
     - name: Create the issue
       env:
         GITHUB_TOKEN: ${{ inputs.gh-token }}
