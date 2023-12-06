@@ -36,16 +36,16 @@ runs:
         if [[ $(date +%H) < 10 ]]
         then
           echo "Will move before 10!"
-          start-time="$(date +%F) 14:00 ET"
-          end-time="$(date +%F) 14:30 ET"
+          START_TIME="$(date +%F) 14:00 ET"
+          END_TIME="$(date +%F) 14:30 ET"
           echo "will move on ${start-time}"
         else
           echo "Will move tomorrow!"
-          start-time="$(date -d "tomorrow" +%F) 10:00"
-          end-time="$(date -d "tomorrow" +%F) 13:00"
+          START_TIME="$(date -d "tomorrow" +%F) 10:00"
+          END_TIME="$(date -d "tomorrow" +%F) 13:00"
         fi
-        echo "proposed_end_date_time=${end-time}" >> $GITHUB_ENV
-        echo "proposed_start_date_time=${start-time}" >> $GITHUB_ENV
+        echo "proposed_end_date_time=${END_TIME}" >> $GITHUB_ENV
+        echo "proposed_start_date_time=${START_TIME}" >> $GITHUB_ENV
         echo "NEW_VERSION=${{ inputs.new-version}}" >> $GITHUB_ENV
         echo "OLD_VERSION=${{ inputs.old-version}}" >> $GITHUB_ENV
       shell: bash
