@@ -38,7 +38,6 @@ runs:
           echo "Will move before 10!"
           START_TIME="$(date +%F) 14:00 ET"
           END_TIME="$(date +%F) 14:30 ET"
-          echo "will move on ${start-time}"
         else
           echo "Will move tomorrow!"
           START_TIME="$(date -d "tomorrow" +%F) 10:00"
@@ -63,7 +62,7 @@ runs:
       id: create-issue
       with:
         route: POST /repos/{owner}/{repo}/issues
-        owner: mhaley3733
+        owner: mhaley37
         repo: mhaley37
         assignees: '[mhaley37]'
         labels: '[lhdi,maintenance-request]'
