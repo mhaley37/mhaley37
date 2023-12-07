@@ -5,20 +5,50 @@ on:
   workflow_dispatch:
 
 jobs:
-  create-issue:
-    name: Create a new issue
+  compare-file-timestamps:
+    name: Compare file timestamps
     runs-on: ubuntu-latest
+    strategy:
+      matrix: 
+        include:
+          - org: mhaley37
+            role: copy
+            repo: mhaley37
+            path: .github/ISSUE_TEMPLATE/maintenance-request.md
+          - org: department-of-veterans-affairs
+            role: source
+            repo: lighthouse-devops-support
+            path: .github/ISSUE_TEMPLATE/maintenance-request.md
+    outputs:
+      copy: ${{ steps.get-file-update-time.outputs.copy}}
+      source: ${{ steps.get-file-update-time.outputs.source }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Create issue
-        id: create-issue
-        uses: './.github/actions/create-maintenance-request'
-        with:
-          gh-token: ${{ github.token }}
-          new-version: '23.12.4'
-          old-version: '23.11.2'
-      - name: Echo results
+      - name: Get last update time of file
+        id: get-file-update-time
+        run: >-
+          echo "${{ matrix.role }}=$(gh api /repos/${{ matrix.org }}/${{ matrix.repo }}/commits)
+          --method GET
+          --field path=${{ matrix.path}}
+          --jq '.[0].commit.committer.date'
+          " >> $GITHUB_OUTPUT
+      - name: Echo timestamp
         run: |
-          echo New Issues Created, number ${{ steps.create-issue.outputs.issue-number }}
-          echo The URL is ${{ steps.create-issue.outputs.url }}
+          echo "The last updated time of ${{ matrix.path }} for the ${{ matrix.repo}} repo is ${{ steps.get-file-update-time.outputs[matrix.role] }}"
+        shell: bash
+  # create-issue:
+  #   name: Create a new issue
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #     - name: Create issue
+  #       id: create-issue
+  #       uses: './.github/actions/create-maintenance-request'
+  #       with:
+  #         gh-token: ${{ github.token }}
+  #         new-version: '23.12.4'
+  #         old-version: '23.11.2'
+  #     - name: Echo results
+  #       run: |
+  #         echo New Issues Created, number ${{ steps.create-issue.outputs.issue-number }}
+  #         echo The URL is ${{ steps.create-issue.outputs.url }}
