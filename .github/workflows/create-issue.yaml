@@ -19,10 +19,15 @@ jobs:
             repo: mhaley37
              #path: .github/ISSUE_TEMPLATE/maintenance-request.md
             path: README.md
-          - org: department-of-veterans-affairs
-            role: copy
-            repo: lighthouse-devops-support
-            path: .github/ISSUE_TEMPLATE/maintenance-request.md
+          # - org: department-of-veterans-affairs
+          #   role: copy
+          #   repo: lighthouse-devops-support
+          #   path: .github/ISSUE_TEMPLATE/maintenance-request.md
+          - org: mhaley37
+            role: source
+            repo: mhaley37
+             #path: .github/ISSUE_TEMPLATE/maintenance-request.md
+            path: README.md          
     outputs:
       copy: ${{ steps.parse-date.outputs.copy}}
       source: ${{ steps.parse-date.outputs.source }}
