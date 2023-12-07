@@ -49,10 +49,14 @@ jobs:
       #     " >> $GITHUB_OUTPUT
       # - name: Exit if missing timestamp
       #   if: ${{ steps.get-file-update-time.outputs.data}}
-        
+      - name: Parse out date
+        id: parse-date
+        run: >-
+          echo "value=$(jq -r '.[0].commit.committer.date'
+            )" >> $GITHUB_OUTPUTS
       - name: Echo timestamp
         run: |
-          echo "${{ steps.get-file-update-time.outputs.data }}"
+          echo "${{ steps.parse-date.outputs.value }}"
         shell: bash
 
   compare-file-timestamps:
