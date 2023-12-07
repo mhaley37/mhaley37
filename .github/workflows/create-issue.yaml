@@ -52,7 +52,7 @@ jobs:
         
       - name: Echo timestamp
         run: |
-          echo "The last updated time of ${{ matrix.path }} for the ${{ matrix.repo}} repo is ${{ steps.get-file-update-time.outputs[matrix.role] }}"
+          echo "${{ steps.get-file-update-time.outputs.data }}"
         shell: bash
 
   compare-file-timestamps:
