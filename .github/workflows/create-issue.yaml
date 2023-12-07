@@ -17,7 +17,8 @@ jobs:
           - org: mhaley37
             role: source
             repo: mhaley37
-            path: .github/ISSUE_TEMPLATE/maintenance-request.md
+            #path: .github/ISSUE_TEMPLATE/maintenance-request.md
+             path: README.md
           - org: department-of-veterans-affairs
             role: copy
             repo: lighthouse-devops-support
@@ -46,6 +47,9 @@ jobs:
       #     --field path=${{ matrix.path}}
       #     --jq '.[0].commit.committer.date')
       #     " >> $GITHUB_OUTPUT
+      # - name: Exit if missing timestamp
+      #   if: ${{ steps.get-file-update-time.outputs.data}}
+        
       - name: Echo timestamp
         run: |
           echo "The last updated time of ${{ matrix.path }} for the ${{ matrix.repo}} repo is ${{ steps.get-file-update-time.outputs[matrix.role] }}"
