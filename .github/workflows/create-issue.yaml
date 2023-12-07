@@ -24,7 +24,7 @@ jobs:
           #   repo: lighthouse-devops-support
           #   path: .github/ISSUE_TEMPLATE/maintenance-request.md
           - org: mhaley37
-            role: source
+            role: copy
             repo: mhaley37
              #path: .github/ISSUE_TEMPLATE/maintenance-request.md
             path: cat       
