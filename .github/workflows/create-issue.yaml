@@ -56,7 +56,8 @@ jobs:
       #   )" >> $GITHUB_OUTPUTS
       - name: Parse out date
         id: parse-date
-        run: "echo latest release: '${{ steps.get-file-update-time.outputs.data.commit }}'"
+        run: |
+          echo "${{ steps.get-file-update-time.outputs.data }}" | jq '.'
       - name: Echo timestamp
         run: |
           echo "${{ steps.parse-date.outputs.value }}"
