@@ -4,6 +4,9 @@ on:
   push:
   workflow_dispatch:
 
+# GOOD ONE
+# echo "   copy=$(gh api /repos/department-of-veterans-affairs/lighthouse-devops-support/commits --method GET --field path=.github/ISSUE_TEMPLATE/maintenance-request.md --jq '.[0].commit.committer.date') " >> $GITHUB_OUTPUT
+# echo "source=$(gh api /repos/department-of-veterans-affairs/lighthouse-devops-support/commits/ --method GET --field path=.github/ISSUE_TEMPLATE/maintenance-request.md --jq '.[0].commit.committer.date') " >> $GITHUB_OUTPUT && if [[ $? != 0 ]]; then exit $?; fi
 jobs:
   get-file-timestamps:
     name: Compare file timestamps
@@ -23,16 +26,26 @@ jobs:
       copy: ${{ steps.get-file-update-time.outputs.copy}}
       source: ${{ steps.get-file-update-time.outputs.source }}
     steps:
-      - name: Get last update time of file
+      - uses: octokit/request-action@v2.x
+        name: Get last update time of file
         id: get-file-update-time
+        with:
+          route: GET /repos/OWNER/REPO/commits
+          owner: ${{ matrix.org }}
+          repo: ${{ matrix.repo }}
+          path: ${{ matrix.path}}
         env:
-          GH_TOKEN: ${{ secrets.GH_TOKEN }}
-        run: >-
-          echo "${{ matrix.role }}=$(gh api /repos/${{ matrix.org }}/${{ matrix.repo }}/commits
-          --method GET
-          --field path=${{ matrix.path}}
-          --jq '.[0].commit.committer.date')
-          " >> $GITHUB_OUTPUT
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
+      # - name: Get last update time of file
+      #   id: get-file-update-time
+      #   env:
+      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      #   run: >-
+      #     echo "${{ matrix.role }}=$(gh api /repos/${{ matrix.org }}/${{ matrix.repo }}/commits
+      #     --method GET
+      #     --field path=${{ matrix.path}}
+      #     --jq '.[0].commit.committer.date')
+      #     " >> $GITHUB_OUTPUT
       - name: Echo timestamp
         run: |
           echo "The last updated time of ${{ matrix.path }} for the ${{ matrix.repo}} repo is ${{ steps.get-file-update-time.outputs[matrix.role] }}"
