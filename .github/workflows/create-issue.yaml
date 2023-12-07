@@ -27,7 +27,7 @@ jobs:
             role: source
             repo: mhaley37
              #path: .github/ISSUE_TEMPLATE/maintenance-request.md
-            path: README.md          
+            path: cat       
     outputs:
       copy: ${{ steps.parse-date.outputs.copy}}
       source: ${{ steps.parse-date.outputs.source }}
