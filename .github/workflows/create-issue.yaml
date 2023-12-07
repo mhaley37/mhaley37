@@ -30,9 +30,10 @@ jobs:
         name: Get last update time of file
         id: get-file-update-time
         with:
-          route: GET /repos/OWNER/REPO/commits
+          route: GET /repos/{owner}/{repo}/commits
           owner: ${{ matrix.org }}
           repo: ${{ matrix.repo }}
+          path: ${{ matrix.path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
       # - name: Get last update time of file
