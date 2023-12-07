@@ -15,7 +15,7 @@ jobs:
       matrix: 
         include:
           - org: mhaley37
-            role: source
+            role: copy
             repo: mhaley37
              #path: .github/ISSUE_TEMPLATE/maintenance-request.md
             path: README.md
@@ -24,7 +24,7 @@ jobs:
           #   repo: lighthouse-devops-support
           #   path: .github/ISSUE_TEMPLATE/maintenance-request.md
           - org: mhaley37
-            role: copy
+            role: source
             repo: mhaley37
              #path: .github/ISSUE_TEMPLATE/maintenance-request.md
             path: cat       
