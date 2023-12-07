@@ -26,10 +26,10 @@ jobs:
       - name: Get last update time of file
         id: get-file-update-time
         run: >-
-          echo "${{ matrix.role }}=$(gh api /repos/${{ matrix.org }}/${{ matrix.repo }}/commits)
+          echo "${{ matrix.role }}=$(gh api /repos/${{ matrix.org }}/${{ matrix.repo }}/commits
           --method GET
           --field path=${{ matrix.path}}
-          --jq '.[0].commit.committer.date'
+          --jq '.[0].commit.committer.date')
           " >> $GITHUB_OUTPUT
       - name: Echo timestamp
         run: |
