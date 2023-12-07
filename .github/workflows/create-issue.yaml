@@ -12,11 +12,11 @@ jobs:
       matrix: 
         include:
           - org: mhaley37
-            role: copy
+            role: source
             repo: mhaley37
             path: .github/ISSUE_TEMPLATE/maintenance-request.md
           - org: department-of-veterans-affairs
-            role: source
+            role: copy
             repo: lighthouse-devops-support
             path: .github/ISSUE_TEMPLATE/maintenance-request.md
     outputs:
