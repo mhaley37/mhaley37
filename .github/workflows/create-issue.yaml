@@ -18,7 +18,7 @@ jobs:
             role: copy
             repo: mhaley37
              #path: .github/ISSUE_TEMPLATE/maintenance-request.md
-            path: README.md
+            path: README.mdasdfasdfasdf
           # - org: department-of-veterans-affairs
           #   role: copy
           #   repo: lighthouse-devops-support
@@ -55,10 +55,6 @@ jobs:
     needs: get-file-timestamps
     runs-on: ubuntu-latest
     steps:
-      - name: print stuff
-        run: |
-          echo "Source is ${{ needs.get-file-timestamps.outputs.source }}"
-          echo "Copy is ${{ needs.get-file-timestamps.outputs.copy }}"
       - name: Copy is out of date
         if: needs.get-file-timestamps.outputs.copy < needs.get-file-timestamps.outputs.source
         run: echo "File is out of date!"
