@@ -45,9 +45,7 @@ jobs:
       - name: Parse out date
         id: parse-date
         run: >-
-          echo "${{matrix.role}}=
-          $(echo '${{ steps.get-file-update-time.outputs.data }}' | jq -r '.[0].commit.committer.date')
-          " >> $GITHUB_OUTPUT
+          echo "${{matrix.role}}=$(echo ${{ steps.get-file-update-time.outputs.data }} | jq -r '.[0].commit.committer.date')" >> $GITHUB_OUTPUT
       - name: Exit if no date found
         if: steps.parse-date.outputs[matrix.role] == 'failure'
         run: exit 1
