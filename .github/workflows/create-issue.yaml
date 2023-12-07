@@ -52,8 +52,9 @@ jobs:
       - name: Parse out date
         id: parse-date
         run: >-
-          echo "value=$( echo ${{ steps.get-file-update-time.outputs.data }} | jq -r '.[0].commit.committer.date'
-            )" >> $GITHUB_OUTPUTS
+          echo "value=$( 
+          echo ${{ steps.get-file-update-time.outputs.data }}
+          )" >> $GITHUB_OUTPUTS
       - name: Echo timestamp
         run: |
           echo "${{ steps.parse-date.outputs.value }}"
