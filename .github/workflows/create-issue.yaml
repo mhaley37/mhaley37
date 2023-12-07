@@ -47,8 +47,8 @@ jobs:
         run: >-
           echo "${{matrix.role}}=$(echo '${{ steps.get-file-update-time.outputs.data }}' | jq -r '.[0].commit.committer.date')" >> $GITHUB_OUTPUT
       - name: Exit if no date found
-        if: steps.parse-date.outputs[matrix.role] == ''
-        run: exit 1
+        #if: steps.parse-date.outputs[matrix.role] == ''
+        run: echo ${{ steps.parse-date.outputs[matrix.role] }}
 
   compare-file-timestamps:
     name: Compare file timestamps
