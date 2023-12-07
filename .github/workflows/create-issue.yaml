@@ -24,8 +24,8 @@ jobs:
             repo: lighthouse-devops-support
             path: .github/ISSUE_TEMPLATE/maintenance-request.md
     outputs:
-      copy: ${{ steps.get-file-update-time.outputs.copy}}
-      source: ${{ steps.get-file-update-time.outputs.source }}
+      copy: ${{ steps.parse-date.outputs.copy}}
+      source: ${{ steps.parse-date.outputs.source }}
     steps:
       - uses: octokit/request-action@v2.x
         name: Get last update time of file
@@ -36,34 +36,16 @@ jobs:
           repo: ${{ matrix.repo }}
           path: ${{ matrix.path }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
-      # - name: Get last update time of file
-      #   id: get-file-update-time
-      #   env:
-      #     GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      #   run: >-
-      #     echo "${{ matrix.role }}=$(gh api /repos/${{ matrix.org }}/${{ matrix.repo }}/commits
-      #     --method GET
-      #     --field path=${{ matrix.path}}
-      #     --jq '.[0].commit.committer.date')
-      #     " >> $GITHUB_OUTPUT
-      # - name: Exit if missing timestamp
-      #   if: ${{ steps.get-file-update-time.outputs.data}}
-
-      # echo "value=$( 
-      #   echo ${{ steps.get-file-update-time.outputs.data }} 
-      #   | jq -r '.[0].commit.committer.date'
-      #   )" >> $GITHUB_OUTPUTS
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Parse out date
         id: parse-date
         run: >-
-          echo "value=
+          echo "${{matrix.role}}=
           $(echo '${{ steps.get-file-update-time.outputs.data }}' | jq '.[0].commit.committer.date')
           " >> $GITHUB_OUTPUT
-      - name: Echo timestamp
-        run: |
-          echo "${{ steps.parse-date.outputs.value }}"
-        shell: bash
+      - name: Exit if no date found
+        if: steps.parse-date.outputs[matrix.role] == 'failure'
+        run: exit 1
 
   compare-file-timestamps:
     name: Compare file timestamps
