@@ -25,6 +25,8 @@ jobs:
     steps:
       - name: Get last update time of file
         id: get-file-update-time
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: >-
           echo "${{ matrix.role }}=$(gh api /repos/${{ matrix.org }}/${{ matrix.repo }}/commits
           --method GET
