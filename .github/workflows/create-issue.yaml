@@ -33,7 +33,6 @@ jobs:
           route: GET /repos/OWNER/REPO/commits
           owner: ${{ matrix.org }}
           repo: ${{ matrix.repo }}
-          path: ${{ matrix.path}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}      
       # - name: Get last update time of file
