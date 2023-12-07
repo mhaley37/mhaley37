@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  compare-file-timestamps:
+  get-file-timestamps:
     name: Compare file timestamps
     runs-on: ubuntu-latest
     strategy:
@@ -37,6 +37,17 @@ jobs:
         run: |
           echo "The last updated time of ${{ matrix.path }} for the ${{ matrix.repo}} repo is ${{ steps.get-file-update-time.outputs[matrix.role] }}"
         shell: bash
+
+  compare-file-timestamps:
+    name: Compare file timestamps
+    needs: get-file-timestamps
+    runs-on: ubuntu-latest
+    steps:
+      - name: Copy is out of date
+        if: needs.get-file-timestamps.outputs.copy < needs.get-file-timestamps.outputs.source
+        run: echo "File is out of date!"
+        
+
   # create-issue:
   #   name: Create a new issue
   #   runs-on: ubuntu-latest
