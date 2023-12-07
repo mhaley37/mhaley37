@@ -17,8 +17,8 @@ jobs:
           - org: mhaley37
             role: source
             repo: mhaley37
-            #path: .github/ISSUE_TEMPLATE/maintenance-request.md
-             path: README.md
+             #path: .github/ISSUE_TEMPLATE/maintenance-request.md
+            path: README.md
           - org: department-of-veterans-affairs
             role: copy
             repo: lighthouse-devops-support
