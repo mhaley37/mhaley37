@@ -57,7 +57,7 @@ jobs:
       - name: Parse out date
         id: parse-date
         run: >-
-          echo ${{ steps.get-file-update-time.outputs.data }}
+          echo "${{ steps.get-file-update-time.outputs.data }}"
       - name: Echo timestamp
         run: |
           echo "${{ steps.parse-date.outputs.value }}"
