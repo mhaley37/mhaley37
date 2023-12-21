@@ -25,7 +25,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix: 
-        tag: [billie,bobbie,boobie]
+        tag: ${{ fromJson( needs.build-array.outputs.tags ) }}
     steps:
       - name: print name
         shell: bash
