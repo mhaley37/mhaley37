@@ -24,7 +24,7 @@ jobs:
     needs: build-array
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ fromJson(needs.build-array.outputs.tags) }}
+      matrix: ${{ needs.build-array.outputs.tags }}
     steps:
       - name: print name
         shell: bash
