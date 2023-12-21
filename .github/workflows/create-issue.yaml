@@ -17,7 +17,7 @@ jobs:
         id: add-one
         shell: bash
         run: |
-          echo "tags=${{ env.tags }},\"matt\"" >> $GITHUB_ENV
+          echo "tagsssssss=${{ env.tags }},\"matt\"" >> $GITHUB_ENV
 
   run-off-matrix:
     name: Iterate names
