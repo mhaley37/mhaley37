@@ -9,15 +9,15 @@ jobs:
     name: Build array
     runs-on: ubuntu-latest
     outputs:
-      tags: '["mike","bill","bryan"]'
+      tags: '[${{ env.tags }}]'
     env:
-      tags: mike
+      tags: '"mike"'
     steps:
       - name: add one
         id: add-one
         shell: bash
         run: |
-          echo "tags=${{ env.tags }},matt" >> $GITHUB_ENV
+          echo "tags=${{ env.tags }},\"matt\"" >> $GITHUB_ENV
 
   run-off-matrix:
     name: Iterate names
