@@ -24,12 +24,13 @@ jobs:
     needs: build-array
     runs-on: ubuntu-latest
     strategy:
-      matrix: ${{ needs.build-array.outputs.tags }}
+      matrix: 
+        tag: ${{ needs.build-array.outputs.tags }}
     steps:
       - name: print name
         shell: bash
         run: |
-          echo "Hello my name is ${{ matrix.value }}!"
+          echo "Hello my name is ${{ matrix.tag }}!"
        
   #   strategy:
   #     matrix: 
