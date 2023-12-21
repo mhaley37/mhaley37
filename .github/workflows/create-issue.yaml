@@ -4,60 +4,81 @@ on:
   push:
   workflow_dispatch:
 
-# GOOD ONE
-# echo "   copy=$(gh api /repos/department-of-veterans-affairs/lighthouse-devops-support/commits --method GET --field path=.github/ISSUE_TEMPLATE/maintenance-request.md --jq '.[0].commit.committer.date') " >> $GITHUB_OUTPUT
-# echo "source=$(gh api /repos/department-of-veterans-affairs/lighthouse-devops-support/commits/ --method GET --field path=.github/ISSUE_TEMPLATE/maintenance-request.md --jq '.[0].commit.committer.date') " >> $GITHUB_OUTPUT && if [[ $? != 0 ]]; then exit $?; fi
 jobs:
-  get-file-timestamps:
+  build-array:
     name: Compare file timestamps
+    runs-on: ubuntu-latest
+    outputs:
+      tags: join( steps.add-one.outputs.add-one )
+    env:
+      tags: mike
+    steps:
+      - name: add one
+        id: add-one
+        shell: bash
+        run: |
+          echo "tags=${{ env.tags }},matt" >> $GITHUB_ENV
+
+  run-off-matrix:
+    name: Iterate names
+    needs: build-array
     runs-on: ubuntu-latest
     strategy:
-      matrix: 
-        include:
-          - org: mhaley37
-            role: copy
-            repo: mhaley37
-             #path: .github/ISSUE_TEMPLATE/maintenance-request.md
-            path: README.mdasdfasdfasdf
-          # - org: department-of-veterans-affairs
-          #   role: copy
-          #   repo: lighthouse-devops-support
-          #   path: .github/ISSUE_TEMPLATE/maintenance-request.md
-          - org: mhaley37
-            role: source
-            repo: mhaley37
-             #path: .github/ISSUE_TEMPLATE/maintenance-request.md
-            path: cat       
-    outputs:
-      copy: ${{ steps.parse-date.outputs.copy}}
-      source: ${{ steps.parse-date.outputs.source }}
+      matrix:
+        tag: ${{ needs.build-array.outputs.tags }}
     steps:
-      - uses: octokit/request-action@v2.x
-        name: Get last update time of file
-        id: get-file-update-time
-        with:
-          route: GET /repos/{owner}/{repo}/commits
-          owner: ${{ matrix.org }}
-          repo: ${{ matrix.repo }}
-          path: ${{ matrix.path }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Parse out date
-        id: parse-date
-        run: >-
-          echo "${{matrix.role}}=$(echo '${{ steps.get-file-update-time.outputs.data }}' | jq -r '.[0].commit.committer.date')" >> $GITHUB_OUTPUT
-      - name: Exit if no date found
-        if: steps.parse-date.outputs[matrix.role] == 'null'
-        run: exit 1
+      - name: print name
+        shell: bash
+        run: |
+          echo "Hello my name is ${{ matrix.tag }}!"
+       
+  #   strategy:
+  #     matrix: 
+  #       include:
+  #         - org: mhaley37
+  #           role: copy
+  #           repo: mhaley37
+  #            #path: .github/ISSUE_TEMPLATE/maintenance-request.md
+  #           path: README.mdasdfasdfasdf
+  #         # - org: department-of-veterans-affairs
+  #         #   role: copy
+  #         #   repo: lighthouse-devops-support
+  #         #   path: .github/ISSUE_TEMPLATE/maintenance-request.md
+  #         - org: mhaley37
+  #           role: source
+  #           repo: mhaley37
+  #            #path: .github/ISSUE_TEMPLATE/maintenance-request.md
+  #           path: cat       
+  #   outputs:
+  #     copy: ${{ steps.parse-date.outputs.copy}}
+  #     source: ${{ steps.parse-date.outputs.source }}
+  #   steps:
+  #     - uses: octokit/request-action@v2.x
+  #       name: Get last update time of file
+  #       id: get-file-update-time
+  #       with:
+  #         route: GET /repos/{owner}/{repo}/commits
+  #         owner: ${{ matrix.org }}
+  #         repo: ${{ matrix.repo }}
+  #         path: ${{ matrix.path }}
+  #       env:
+  #         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Parse out date
+  #       id: parse-date
+  #       run: >-
+  #         echo "${{matrix.role}}=$(echo '${{ steps.get-file-update-time.outputs.data }}' | jq -r '.[0].commit.committer.date')" >> $GITHUB_OUTPUT
+  #     - name: Exit if no date found
+  #       if: steps.parse-date.outputs[matrix.role] == 'null'
+  #       run: exit 1
 
-  compare-file-timestamps:
-    name: Compare file timestamps
-    needs: get-file-timestamps
-    runs-on: ubuntu-latest
-    steps:
-      - name: Copy is out of date
-        if: needs.get-file-timestamps.outputs.copy < needs.get-file-timestamps.outputs.source
-        run: echo "File is out of date!"
+  # compare-file-timestamps:
+  #   name: Compare file timestamps
+  #   needs: get-file-timestamps
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Copy is out of date
+  #       if: needs.get-file-timestamps.outputs.copy < needs.get-file-timestamps.outputs.source
+  #       run: echo "File is out of date!"
         
 
   # create-issue:
