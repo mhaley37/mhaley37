@@ -6,10 +6,10 @@ on:
 
 jobs:
   build-array:
-    name: Compare file timestamps
+    name: Build array
     runs-on: ubuntu-latest
     outputs:
-      tags: join( steps.add-one.outputs.add-one )
+      tags: '["mike","bill","bryan"]'
     env:
       tags: mike
     steps:
@@ -24,13 +24,12 @@ jobs:
     needs: build-array
     runs-on: ubuntu-latest
     strategy:
-      matrix:
-        tag: ${{ needs.build-array.outputs.tags }}
+      matrix: ${{ fromJson(needs.build-array.outputs.tags) }}
     steps:
       - name: print name
         shell: bash
         run: |
-          echo "Hello my name is ${{ matrix.tag }}!"
+          echo "Hello my name is ${{ matrix.value }}!"
        
   #   strategy:
   #     matrix: 
