@@ -23,30 +23,6 @@ jobs:
       - name: Print event details
         run: echo "Event name - ${{ github.event_name }}"
 
-  build-test-images:
-    name: Build and Test Images
-    needs: [event-details]
-    if: ${{ !fromJson(needs.event-details.outputs.pr-closed-unmerged) && !fromJson(needs.event-details.outputs.release)}}
-    runs-on: ubuntu-22.04
-    steps:
-      - name: No Op
-        run: echo "Testing"
-
-#   get-images-list:
-#     name: Get tagged list of docker images
-#     needs: [build-test-images]
-#     if: |
-#       !failure()
-#       && !cancelled()
-#       && contains(fromJson('["skipped","success"]'), needs.build-test-images.result)
-#     outputs:
-#         matrix: '["image1","image2"]'
-#         plain: "plain-text"
-#     runs-on: ubuntu-22.04
-#     steps:
-#       - name: no-op
-#         run: echo "testing"
-
   retag-images:
     name: Retag Images
     needs: [event-details]
@@ -116,6 +92,7 @@ jobs:
     steps:
       - name: No Op
         run: echo "Testing"
+
   automated-deployment-approval-no-vars:
     name: Approval (no setup-env-args)
     needs: [deploy]
