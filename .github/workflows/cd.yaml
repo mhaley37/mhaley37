@@ -1,0 +1,176 @@
+name: Continuous Delivery (CD)
+
+on:
+  workflow_dispatch:
+  push: 
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  event-details:
+    name: Compile event details
+    runs-on: ubuntu-22.04
+    outputs:
+      manual-run: false
+      prerelease: true
+      release: true
+      prod-release: false
+      pr-merge: false
+      pr-closed-unmerged: false
+    steps:
+      - name: Print event details
+        run: echo "Event name - ${{ github.event_name }}"
+
+  build-test-images:
+    name: Build and Test Images
+    needs: [event-details]
+    if: ${{ !fromJson(needs.event-details.outputs.pr-closed-unmerged) && !fromJson(needs.event-details.outputs.release)}}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
+
+  get-images-list:
+    name: Get tagged list of docker images
+    needs: [build-test-images]
+    if: |
+      !failure()
+      && !cancelled()
+      && contains(fromJson('["skipped","success"]'), needs.build-test-images.result)
+    outputs:
+        matrix: '["image1","image2"]'
+        plain: "plain-text"
+    runs-on: ubuntu-22.04
+    steps:
+      - name: no-op
+        run: echo "testing"
+
+  retag-images:
+    name: Retag Images
+    needs: [event-details, get-images-list]
+    if: |
+      !failure() &&
+      !cancelled() &&
+      ( fromJSON(needs.event-details.outputs.manual-run) ||
+       fromJSON(needs.event-details.outputs.pr-merge) ||
+       fromJSON(needs.event-details.outputs.release) )
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
+
+  secrel:
+    name: SecRel for all images
+    needs: [event-details, get-images-list]
+    # Scan the image when merged into main, further retags at release time should not need to be re-scanned
+    if: fromJSON(needs.event-details.outputs.pr-merge)
+    uses: department-of-veterans-affairs/lighthouse-tornado-secrel-pipeline/.github/workflows/pipeline.yml@v4
+    with:
+      config-file: .github/secrel/config.yml
+      images: |
+        ${{ needs.get-images-list.outputs.plain }}
+    secrets: inherit
+
+  print-env-values:
+    name: Print environment values
+    needs: [event-details, retag-images, setup-env-args] # Need images to be signed by SecRel prior to deploy for Sandbox/Prod
+    if: always()
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Echo values
+        run: |
+          echo "deploy_env=${{ needs.setup-env-args.outputs.deploy-env }}"
+          echo "needs.retag-images.result=${{ needs.retag-images.result }}"
+
+  setup-env-args:
+    name: Setup environment values
+    needs: [event-details]
+    if: ${{ !fromJSON(needs.event-details.outputs.pr-closed-unmerged) }}
+    runs-on: ubuntu-22.04
+    outputs:
+      deploy-env: ${{ env.deploy_env }}
+    steps:
+      - if: fromJSON(needs.event-details.outputs.release)
+        run: echo "deploy_env=${{ fromJSON(needs.event-details.outputs.prerelease) && 'sandbox' || 'prod' }}" >> $GITHUB_ENV
+      - if: ${{ !fromJSON(needs.event-details.outputs.release) }}
+        run: echo "deploy_env=qa" >> $GITHUB_ENV
+
+  deploy:
+    name: Deploy
+    needs: [event-details, retag-images, secrel, setup-env-args] # Need images to be signed by SecRel prior to deploy for Sandbox/Prod
+    if: |
+      !failure()
+      && !cancelled()
+      && !fromJSON(needs.event-details.outputs.pr-closed-unmerged)
+      && contains(fromJson('["skipped","success"]'), needs.retag-images.result)
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
+
+#   e2e-tests:
+#     name: E2E Tests
+#     needs: [event-details, setup-env-args, deploy]
+#     if: always() && needs.deploy.result == 'success' && !fromJSON(needs.event-details.outputs.pr-closed-unmerged)
+#     #TODO: Remove testing code only
+#     runs-on: ubuntu-22.04
+#     steps:
+#       - name: No Op
+#         shell: bash
+#         run: echo "Testing"
+
+
+#   get-deployed-app-version:
+#     name: Get app version for ${{ matrix.env }}
+#     needs: [deploy, e2e-tests, setup-env-args]
+#     if: needs.setup-env-args.outputs.deploy-env == 'sandbox'
+#     runs-on: ubuntu-22.04
+#     strategy:
+#       matrix:
+#         env: [sandbox, prod]
+#     environment: ${{ matrix.env }}
+#     outputs:
+#       prod: 'prod-version'
+#       sandbox: 'sandobx-version'
+#     steps:
+#         - name: No Op
+#           shell: bash
+#           run: echo "Testing"
+    
+
+  automated-deployment-approval:
+    name: Approval (original)
+    needs: [deploy, setup-env-args]
+    if: needs.setup-env-args.outputs.deploy-env == 'sandbox'
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
+  automated-deployment-approval-no-vars:
+    name: Approval (no setup-env-args)
+    needs: [deploy]
+    # if: needs.setup-env-args.outputs.deploy-env == 'sandbox'
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
+
+  automated-deployment-approval-always:
+    name: Approval (add-always)
+    needs: [deploy, setup-env-args]
+    if: always() && needs.setup-env-args.outputs.deploy-env == 'sandbox'
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
+
+  automated-deployment-approval-no-deploy:
+    name: Approval (no-deploy)
+    needs: [setup-env-args]
+    if: needs.setup-env-args.outputs.deploy-env == 'sandbox'
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
