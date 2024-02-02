@@ -73,7 +73,7 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [event-details, retag-images, secrel, setup-env-args] # Need images to be signed by SecRel prior to deploy for Sandbox/Prod
+    needs: [event-details, retag-images, setup-env-args] # Need images to be signed by SecRel prior to deploy for Sandbox/Prod
     if: |
       !failure()
       && !cancelled()
