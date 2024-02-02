@@ -15,12 +15,12 @@ defaults:
 
 jobs:
 
-  retag:
-    name: Retag
-    runs-on: ubuntu-22.04
-    steps:
-      - name: No Op
-        run: echo "Testing"
+#   retag:
+#     name: Retag
+#     runs-on: ubuntu-22.04
+#     steps:
+#       - name: No Op
+#         run: echo "Testing"
 
   secrel:
     name: SecRel for all images
@@ -33,11 +33,10 @@ jobs:
 
   deploy:
     name: Deploy
-    needs: [retag, secrel] # Need images to be signed by SecRel prior to deploy for Sandbox/Prod
+    needs: [ secrel] # Need images to be signed by SecRel prior to deploy for Sandbox/Prod
     if: |
       !failure()
       && !cancelled()
-      && contains(fromJson('["skipped","success"]'), needs.retag.result)
     runs-on: ubuntu-22.04
     steps:
       - name: No Op
