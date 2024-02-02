@@ -1,0 +1,52 @@
+name: Test needs dependencies
+
+on:
+  workflow_dispatch:
+    inputs:
+      skip-needs-job:
+        description: True if should skip job other jobs are dependent on
+        default: false
+        type: boolean
+        required: false
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+
+  retag:
+    name: Retag
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
+
+  secrel:
+    name: SecRel for all images
+    # Scan the image when merged into main, further retags at release time should not need to be re-scanned
+    if: ${{ !inputs.skip-needs-job }}
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
+
+  deploy:
+    name: Deploy
+    needs: [retag, secrel] # Need images to be signed by SecRel prior to deploy for Sandbox/Prod
+    if: |
+      !failure()
+      && !cancelled()
+      && contains(fromJson('["skipped","success"]'), needs.retag.result)
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
+    
+  automated-deployment-approval:
+    name: Approval (original)
+    needs: [deploy]
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
