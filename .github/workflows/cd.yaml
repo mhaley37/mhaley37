@@ -41,7 +41,7 @@ jobs:
     name: SecRel for all images
     needs: [event-details]
     # Scan the image when merged into main, further retags at release time should not need to be re-scanned
-    #if: fromJSON(needs.event-details.outputs.pr-merge)
+    if: fromJSON(needs.event-details.outputs.pr-merge)
     runs-on: ubuntu-22.04
     steps:
       - name: No Op
