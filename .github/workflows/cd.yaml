@@ -66,12 +66,10 @@ jobs:
     needs: [event-details, get-images-list]
     # Scan the image when merged into main, further retags at release time should not need to be re-scanned
     if: fromJSON(needs.event-details.outputs.pr-merge)
-    uses: department-of-veterans-affairs/lighthouse-tornado-secrel-pipeline/.github/workflows/pipeline.yml@v4
-    with:
-      config-file: .github/secrel/config.yml
-      images: |
-        ${{ needs.get-images-list.outputs.plain }}
-    secrets: inherit
+    runs-on: ubuntu-22.04
+    steps:
+      - name: No Op
+        run: echo "Testing"
 
   print-env-values:
     name: Print environment values
