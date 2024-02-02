@@ -15,37 +15,29 @@ defaults:
 
 jobs:
 
-#   retag:
-#     name: Retag
-#     runs-on: ubuntu-22.04
-#     steps:
-#       - name: No Op
-#         run: echo "Testing"
-
-  secrel:
-    name: SecRel for all images
-    # Scan the image when merged into main, further retags at release time should not need to be re-scanned
+  optional-job:
+    name: Job that may not run, that other jobs are dependent on
     if: ${{ !inputs.skip-needs-job }}
     runs-on: ubuntu-22.04
     steps:
       - name: No Op
-        run: echo "Testing"
+        run: echo "optional-job has run"
 
-  deploy:
-    name: Deploy
-    needs: [ secrel] # Need images to be signed by SecRel prior to deploy for Sandbox/Prod
+  always-job:
+    name: Always run job
+    needs: [ optional-job ]
     if: |
       !failure()
       && !cancelled()
     runs-on: ubuntu-22.04
     steps:
       - name: No Op
-        run: echo "Testing"
+        run: echo "always-job has run"
     
-  automated-deployment-approval:
-    name: Approval (original)
-    needs: [deploy]
+  last-job:
+    name: Runs after always-job
+    needs: [ always-job ]
     runs-on: ubuntu-22.04
     steps:
       - name: No Op
-        run: echo "Testing"
+        run: echo "last-job has run"
