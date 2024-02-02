@@ -41,3 +41,23 @@ jobs:
     steps:
       - name: No Op
         run: echo "last-job has run"
+
+  last-job-always:
+    name: Runs after always-job, ALWAYS
+    needs: [ always-job ]
+    runs-on: ubuntu-22.04
+    if: always()
+    steps:
+    - name: No Op
+      run: echo "last-job has run"
+
+  last-job-not-fail:
+    name: Runs after always-job, if non fail non cancel
+    if: |
+      !failure()
+      && !cancelled()    
+    needs: [ always-job ]
+    runs-on: ubuntu-22.04
+    steps:
+    - name: No Op
+      run: echo "last-job has run"             
