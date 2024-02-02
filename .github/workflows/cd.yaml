@@ -32,24 +32,24 @@ jobs:
       - name: No Op
         run: echo "Testing"
 
-  get-images-list:
-    name: Get tagged list of docker images
-    needs: [build-test-images]
-    if: |
-      !failure()
-      && !cancelled()
-      && contains(fromJson('["skipped","success"]'), needs.build-test-images.result)
-    outputs:
-        matrix: '["image1","image2"]'
-        plain: "plain-text"
-    runs-on: ubuntu-22.04
-    steps:
-      - name: no-op
-        run: echo "testing"
+#   get-images-list:
+#     name: Get tagged list of docker images
+#     needs: [build-test-images]
+#     if: |
+#       !failure()
+#       && !cancelled()
+#       && contains(fromJson('["skipped","success"]'), needs.build-test-images.result)
+#     outputs:
+#         matrix: '["image1","image2"]'
+#         plain: "plain-text"
+#     runs-on: ubuntu-22.04
+#     steps:
+#       - name: no-op
+#         run: echo "testing"
 
   retag-images:
     name: Retag Images
-    needs: [event-details, get-images-list]
+    needs: [event-details]
     if: |
       !failure() &&
       !cancelled() &&
@@ -63,7 +63,7 @@ jobs:
 
   secrel:
     name: SecRel for all images
-    needs: [event-details, get-images-list]
+    needs: [event-details]
     # Scan the image when merged into main, further retags at release time should not need to be re-scanned
     if: fromJSON(needs.event-details.outputs.pr-merge)
     runs-on: ubuntu-22.04
@@ -107,37 +107,7 @@ jobs:
     steps:
       - name: No Op
         run: echo "Testing"
-
-#   e2e-tests:
-#     name: E2E Tests
-#     needs: [event-details, setup-env-args, deploy]
-#     if: always() && needs.deploy.result == 'success' && !fromJSON(needs.event-details.outputs.pr-closed-unmerged)
-#     #TODO: Remove testing code only
-#     runs-on: ubuntu-22.04
-#     steps:
-#       - name: No Op
-#         shell: bash
-#         run: echo "Testing"
-
-
-#   get-deployed-app-version:
-#     name: Get app version for ${{ matrix.env }}
-#     needs: [deploy, e2e-tests, setup-env-args]
-#     if: needs.setup-env-args.outputs.deploy-env == 'sandbox'
-#     runs-on: ubuntu-22.04
-#     strategy:
-#       matrix:
-#         env: [sandbox, prod]
-#     environment: ${{ matrix.env }}
-#     outputs:
-#       prod: 'prod-version'
-#       sandbox: 'sandobx-version'
-#     steps:
-#         - name: No Op
-#           shell: bash
-#           run: echo "Testing"
     
-
   automated-deployment-approval:
     name: Approval (original)
     needs: [deploy, setup-env-args]
