@@ -35,6 +35,11 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Test
+        shell: bash
+        run: |
+          echo Total found is ${{ fromJson(steps.count-label-prs.outputs.data).repository.pullRequests.totalCount }} !     
+
   post-step:
     runs-on: ubuntu-latest  
     needs: check-for-update-pr
