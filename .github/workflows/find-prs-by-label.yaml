@@ -22,9 +22,9 @@ jobs:
         id: count-label-prs
         with:
           query: |
-            query($owner: String!, $repo: String!, $labels: [String!] ) {
+            query($owner: String!, $repo: String! ) {
               repository(owner: $owner, name: $repo) {
-                pullRequests(labels: $labels, states: OPEN ) {
+                pullRequests(labels:["backstage-bump"] states: OPEN ) {
             		 totalCount
                 }
               }
@@ -32,7 +32,7 @@ jobs:
           variables: |
             owner: ${{ github.repository_owner }}
             repo: ${{ github.event.repository.name }}
-            labels: '[backstage-bump]'
+            #labels: '[backstage-bump]'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
