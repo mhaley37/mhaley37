@@ -1,10 +1,10 @@
 name: Test finding PRs by label
 on:
+  push:
   workflow_dispatch:
     inputs:
       label:
         description: Label to search for
-        default: backstage-bump
         type: string
         required: false
         
@@ -30,7 +30,7 @@ jobs:
           variables: |
             owner: ${{ github.repository_owner }}
             repo: ${{ github.event.repository.name }}
-            labels: "[${{ inputs.label }}]"
+            labels: "[${{ inputs.label || 'backstage-bump' }}]"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
           
