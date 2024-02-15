@@ -32,7 +32,7 @@ jobs:
           variables: |
             owner: ${{ github.repository_owner }}
             repo: ${{ github.event.repository.name }}
-            labels: '["backstage-bump"]'
+            labels: '[backstage-bump]'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
