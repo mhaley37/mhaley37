@@ -24,7 +24,7 @@ jobs:
           query: |
             query($owner: String!, $repo: String! ) {
               repository(owner: $owner, name: $repo) {
-                pullRequests(states: OPEN ) {
+                pullRequests(labels: ["backstage-bump"], states: OPEN ) {
             		 totalCount
                 }
               }
@@ -40,7 +40,7 @@ jobs:
     needs: check-for-update-pr
     steps:
       - name: Run only if open PR already
-        if: needs.check-for-open-pr.outputs.exists
+        if: fromJson(needs.check-for-open-pr.outputs.exists)
         shell: bash
         run: |
           echo If I am here it means there is an open PR by label backstage-bump
