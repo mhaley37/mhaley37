@@ -32,7 +32,7 @@ jobs:
           variables: |
             owner: ${{ github.repository_owner }}
             repo: ${{ github.event.repository.name }}
-            number: '49'
+            number: 49
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
           
