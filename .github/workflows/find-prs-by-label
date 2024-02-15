@@ -1,0 +1,40 @@
+name: Test finding PRs by label
+on:
+  workflow_dispatch:
+    inputs:
+      label:
+        description: Label to search for
+        default: backstage-bump
+        type: string
+        required: false
+        
+jobs:
+  update-backstage-version:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+        
+      - uses: octokit/graphql-action@v2.x
+        name: Count PRs by label
+        id: count-label-prs
+        with:
+          query: |
+            query($owner: String!, $repo: String!, $labels:[String!]) {
+              repository(owner: $owner, name: $repo) {
+                pullRequests(labels: $labels, states: OPEN ) {
+            		 totalCount
+                }
+              }
+            }
+          variables: |
+            owner: ${{ github.repository_owner }}
+            repo: ${{ github.event.repository.name }}
+            labels: "[${{ inputs.label }}]"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+          
+      - name: Check if any PRs
+        shell: bash
+        run: |
+          echo There are: ${{ fromJson(steps.count-label-prs).repository.pullRequest.totalCount }} PRs that are open
