@@ -35,18 +35,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test
-        shell: bash
-        run: |
-          echo Total found is ${{ fromJson(steps.count-label-prs.outputs.data).repository.pullRequests.totalCount }} !     
-
   post-step:
     runs-on: ubuntu-latest  
     needs: check-for-update-pr
     steps:
       - name: Run only if open PR already
-        # if: fromJson(needs.check-for-open-pr.outputs.exists)
+        if: fromJson(needs.check-for-update-pr.outputs.exists)
         shell: bash
         run: |
-          echo If I am here it means there is an open PR by label backstage-bump
-          echo -- ${{ needs.check-for-open-pr.outputs.exists }}
+          echo If I am here it means there is an open PR by label backstage-bump!
