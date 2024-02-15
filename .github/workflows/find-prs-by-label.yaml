@@ -14,7 +14,28 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
-        
+
+      - uses: octokit/graphql-action@v2.x
+        name: Count approved reviews
+        id: count-approved-reviews
+        with:
+          query: |
+            query($owner: String!, $repo: String!, $number: Int!) {
+              repository(owner: $owner, name: $repo) {
+                pullRequest(number: $number) {
+                  reviews(states: APPROVED) {
+                    totalCount
+                  }
+                }
+              }
+            }
+          variables: |
+            owner: ${{ github.repository_owner }}
+            repo: ${{ github.event.repository.name }}
+            number: '49'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
+          
       - uses: octokit/graphql-action@v2.x
         name: Count PRs by label
         id: count-label-prs
@@ -22,7 +43,7 @@ jobs:
           query: |
             query($owner: String!, $repo: String! ) {
               repository(owner: $owner, name: $repo) {
-                pullRequests(labels: ["backstage-bump"], states: OPEN ) {
+                pullRequests(states: OPEN ) {
             		 totalCount
                 }
               }
