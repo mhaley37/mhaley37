@@ -14,28 +14,7 @@ jobs:
     steps:
       - name: Check out repo
         uses: actions/checkout@v4
-
-      - uses: octokit/graphql-action@v2.x
-        name: Count approved reviews
-        id: count-approved-reviews
-        with:
-          query: |
-            query($owner: String!, $repo: String!, $number: Int!) {
-              repository(owner: $owner, name: $repo) {
-                pullRequest(number: $number) {
-                  reviews(states: APPROVED) {
-                    totalCount
-                  }
-                }
-              }
-            }
-          variables: |
-            owner: ${{ github.repository_owner }}
-            repo: ${{ github.event.repository.name }}
-            number: 49
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
-          
+         
       - uses: octokit/graphql-action@v2.x
         name: Count PRs by label
         id: count-label-prs
@@ -57,4 +36,4 @@ jobs:
       - name: Check if any PRs
         shell: bash
         run: |
-          echo There are: ${{ fromJson(steps.count-label-prs).repository.pullRequest.totalCount }} PRs that are open
+          echo There are: ${{ steps.count-label-prs }} PRs that are open
