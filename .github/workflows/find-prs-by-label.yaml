@@ -36,4 +36,4 @@ jobs:
       - name: Check if any PRs
         shell: bash
         run: |
-          echo There are: ${{ steps.count-label-prs }} PRs that are open
+          echo There are: ${{ fromJson(steps.count-label-prs.outputs.data).repository.pullRequest.totalCount }} PRs that are open
