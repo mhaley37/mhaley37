@@ -52,7 +52,7 @@ jobs:
         run: |
           # echo "current=$(jq -r .version backstage.json)" >> $GITHUB_OUTPUT
           echo "current=1.22.2"  >> $GITHUB_OUTPUT
-          echo "mostRecent=$(curl {{ env.VERSION_MANIFEST_URL }} | jq -r .releaseVersion)" >> $GITHUB_OUTPUT
+          echo "mostRecent=$(curl ${{ env.VERSION_MANIFEST_URL }} | jq -r .releaseVersion)" >> $GITHUB_OUTPUT
           echo "mostRecent1=$(curl -s ${{ env.VERSION_MANIFEST_URL }} | grep -o '"releaseVersion": "[^"]*' | grep -o '[^"]*$')"
       - name: print results
         run: |
