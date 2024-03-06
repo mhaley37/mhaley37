@@ -1,0 +1,126 @@
+name: Update Backstage Packages
+on:
+  schedule:
+    - cron: '0 07 * * *'
+  workflow_dispatch:
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  check-for-update-pr:
+    name: Check for open backstage update PR
+    runs-on: ubuntu-22.04
+    outputs:
+      exists: ${{ fromJson(steps.count-label-prs.outputs.data).repository.pullRequests.totalCount > 0 }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: octokit/graphql-action@v2.x
+        name: Count PRs by backstage-bump label
+        id: count-label-prs
+        with:
+          query: |
+            query($owner: String!, $repo: String! ) {
+              repository(owner: $owner, name: $repo) {
+                pullRequests(labels:["backstage-bump"] states: OPEN ) {
+            		 totalCount
+                }
+              }
+            }
+          variables: |
+            owner: ${{ github.repository_owner }}
+            repo: ${{ github.event.repository.name }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  check-backstage-version:
+    name: Check if running old version of Backstage
+    runs-on: ubuntu-22.04
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      needs-update: ${{ steps.compare-versions.outputs.mostRecent > steps.compare-versions.outputs.current }}
+      current-version: ${{ steps.compare-versions.outputs.current }}
+      most-recent-version: ${{ steps.compare-versions.outputs.mostRecent }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Compare current and available versions
+        env:
+          VERSION_MANIFEST_URL: https://versions.backstage.io/v1/tags/main/manifest.json
+        id: compare-versions
+        run: |
+          # echo "current=$(jq -r .version backstage.json)" >> $GITHUB_OUTPUT
+          echo "current=1.22.2"  >> $GITHUB_OUTPUT
+          echo "mostRecent=$(curl -s {{ env.VERSION_MANIFEST_URL }} | jq -r .releaseVersion)" >> $GITHUB_OUTPUT
+
+  # update-backstage-version:
+  #   needs: [check-for-update-pr, check-backstage-version]
+  #   if: ${{ !fromJson(needs.check-for-update-pr.outputs.exists) && fromJson(needs.check-backstage-version.outputs.needs-update) }}
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - uses: actions/checkout@v4
+  #     - name: Install dependencies
+  #       uses: ./.github/actions/install-dependencies
+  #       with:
+  #         github-token: ${{ secrets.GITHUB_TOKEN }}
+  #     - name: Update packages
+  #       run: |
+  #         yarn backstage-update
+  #         yarn install
+  #     - name: Format PR body
+  #       id: get-pr-body
+  #       run: |
+  #         echo 'body<<EOF' >> $GITHUB_OUTPUT
+  #         sed -n -e '/Upgraded/,$p' backstage-update-log.txt >> $GITHUB_OUTPUT
+  #         echo 'EOF' >> $GITHUB_OUTPUT
+  #       shell: bash
+  #     - name: Set output variables
+  #       id: vars
+  #       run: |
+  #         pr_title="[API-00000] - Update Backstage to version ${{ needs.check-backstage-version.outputs.most-recent-version }}"
+  #         date="$(date +'%Y-%m-%d')"
+  #         echo "pr_title=$pr_title" >> $GITHUB_OUTPUT
+  #         echo "date=$date" >> $GITHUB_OUTPUT
+  #     - name: Import GPG
+  #       id: import-gpg
+  #       uses: crazy-max/ghaction-import-gpg@v6
+  #       with:
+  #         gpg_private_key: ${{ secrets.CODE_VA_GPG_PRIVATE_KEY }}
+  #         passphrase: ${{ secrets.CODE_VA_GPG_PASSPHRASE }}
+  #         git_config_global: true
+  #         git_user_signingkey: true
+  #         git_commit_gpgsign: true
+  #     - name: Disable Git hooks
+  #       run: git config core.hooksPath /dev/null
+  #     - name: Create PR
+  #       id: create-pr
+  #       uses: peter-evans/create-pull-request@671dc9c9e0c2d73f07fa45a3eb0220e1622f0c5f # pin@v3
+  #       with:
+  #         token: ${{ secrets.REPO_SCOPE_GITHUB_TOKEN }}
+  #         committer: ${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>
+  #         author: ${{ steps.import-gpg.outputs.name }} <${{ steps.import-gpg.outputs.email }}>
+  #         commit-message: '[API-00000] - Auto Update for Backstage ${{needs.check-backstage-version.outputs.most-recent-version}}'
+  #         signoff: true
+  #         title: ${{ steps.vars.outputs.pr_title }}
+  #         base: main
+  #         branch: API-00000-update-backstage-${{ needs.check-backstage-version.outputs.most-recent-version }}
+  #         body: |
+  #           Pull Request to Update Backstage (auto-generated)
+  #           - ${{ steps.vars.outputs.date }}
+  #           - [Output Log](https://github.com/${{ github.repository }}/blob/auto-update-backstage/backstage-update-log.txt):
+  #             ${{ steps.get-pr-body.outputs.body }}
+  #             Check the backstage-update-log.txt for a full list of changes
+  #           - [Backstage Create-App Change Log](https://github.com/backstage/backstage/blob/master/packages/create-app/CHANGELOG.md)
+  #           - Most Recent Version: ${{ needs.check-backstage-version.outputs.most-recent-version }}
+  #           - Current Version: ${{ needs.check-backstage-version.outputs.current-version }}
+  #         labels: |
+  #           automated
+  #           backstage
+  #           backstage-bump
+  #         reviewers: lighthouse-bandicoot
+  #         draft: false
+  #     - name: Check outputs
+  #       run: |
+  #         echo "Pull Request Number - ${{ steps.create-pr.outputs.pull-request-number }}"
+  #         echo "Pull Request URL - ${{ steps.create-pr.outputs.pull-request-url }}"
