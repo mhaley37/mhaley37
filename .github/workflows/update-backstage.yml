@@ -51,13 +51,14 @@ jobs:
         id: compare-versions
         run: |
           # echo "current=$(jq -r .version backstage.json)" >> $GITHUB_OUTPUT
-          curl {{ env.VERSION_MANIFEST_URL }}
           echo "current=1.22.2"  >> $GITHUB_OUTPUT
           echo "mostRecent=$(curl {{ env.VERSION_MANIFEST_URL }} | jq -r .releaseVersion)" >> $GITHUB_OUTPUT
+          echo "mostRecent1=$(curl -s ${{ env.VERSION_MANIFEST_URL }} | grep -o '"releaseVersion": "[^"]*' | grep -o '[^"]*$')"
       - name: print results
         run: |
           echo "The current is ${{ steps.compare-versions.outputs.current }}."
           echo "The mostRecent is ${{ steps.compare-versions.outputs.mostRecent }}."
+          echo "The mostRecent1 is ${{ steps.compare-versions.outputs.mostRecent1 }}."
 
   # update-backstage-version:
   #   needs: [check-for-update-pr, check-backstage-version]
