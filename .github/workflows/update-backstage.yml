@@ -54,9 +54,10 @@ jobs:
           curl {{ env.VERSION_MANIFEST_URL }}
           echo "current=1.22.2"  >> $GITHUB_OUTPUT
           echo "mostRecent=$(curl {{ env.VERSION_MANIFEST_URL }} | jq -r .releaseVersion)" >> $GITHUB_OUTPUT
-      - run: |
-         echo "The current is ${{ steps.compare-versions.outputs.current }}."
-         echo "The mostRecent is ${{ steps.compare-versions.outputs.mostRecent }}."
+      - name: print results
+        run: |
+          echo "The current is ${{ steps.compare-versions.outputs.current }}."
+          echo "The mostRecent is ${{ steps.compare-versions.outputs.mostRecent }}."
 
   # update-backstage-version:
   #   needs: [check-for-update-pr, check-backstage-version]
