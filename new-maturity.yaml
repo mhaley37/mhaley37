@@ -1,13 +1,30 @@
 apiVersion: backstage.io/v1alpha1
 kind: API
 metadata:
-  name: NEW-CODE-VA-MARKER-TEST-API
-  description: NEW API for testing maturity marker related stuff
+  name: CODE-VA-TEST-API
+  description: The Benefits Claims API is a suite of services that enables VA and third-party consumers to build applications that let Veterans and their authorized representatives view and submit certain claims and claim-related information to the VA. We provide the ability to auto-establish claims by submitting structured data that can return realtime validations, allowing for better data quality.
   annotations:
-    github.com/project-slug: https://github.com/department-of-veterans-affairs/code-va
-  title: NEW-VA-MARKER-TEST-API
+    github.com/project-slug: https://github.com/department-of-veterans-affairs/vets-api
+    datadog/production-monitor-id: '130917'
+    datadog/sandbox-monitor-id: '130924' # status tab
+    hub.lighthouse.va.gov/api-id: 'claims' # release notes tab
+  title: CODE VA Test API
   tags:
-  - external
+    - lighthouse
+    - external
+  links:
+    - url: https://developer.va.gov/explore/api/benefits-claims/docs?version=v1
+      title: Public Docs
+      icon: web
+    - url: https://app.mural.co/t/departmentofveteransaffairs9999/m/departmentofveteransaffairs9999/1663867462895/b0161ab939bba7d08f6bea07e3663d9d5cea22d4?sender=u9943b9a042c336e83bb20590
+      title: Claim Status Data Flow Diagram
+      icon: web
+    - url: https://app.mural.co/t/departmentofveteransaffairs9999/m/departmentofveteransaffairs9999/1663867462895/b0161ab939bba7d08f6bea07e3663d9d5cea22d4?sender=u9943b9a042c336e83bb20590
+      title: ITF Process Flow Diagram
+      icon: web
+    - url: https://app.mural.co/t/departmentofveteransaffairs9999/m/departmentofveteransaffairs9999/1663867462895/b0161ab939bba7d08f6bea07e3663d9d5cea22d4?sender=u9943b9a042c336e83bb20590
+      title: 526EZ Process Flow Diagram
+      icon: web
   va:
     maturity-markers:
       version: 1
@@ -64,124 +81,12 @@ metadata:
       testData:
       - notAvailable
       - testAvailable
-  annotations:
-    hub.lighthouse.va.gov/api-id: new-api
-  name: new-maturity-api
-  description: New Maturity API.
-  tags:
-  - lighthouse-developer-portal-test-set
+      - testNotAvailable
 spec:
-  type: soap
-  lifecycle: deprecated
-  owner: team-c
-  definition: |
-    <?xml version="1.0" encoding="UTF-8"?>
-    <definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="http://www.dataaccess.com/webservicesserver/" name="NumberConversion" targetNamespace="http://www.dataaccess.com/webservicesserver/">
-      <types>
-        <xs:schema elementFormDefault="qualified" targetNamespace="http://www.dataaccess.com/webservicesserver/">
-          <xs:element name="NumberToWords">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element name="ubiNum" type="xs:unsignedLong"/>
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="NumberToWordsResponse">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element name="NumberToWordsResult" type="xs:string"/>
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="NumberToDollars">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element name="dNum" type="xs:decimal"/>
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-          <xs:element name="NumberToDollarsResponse">
-            <xs:complexType>
-              <xs:sequence>
-                <xs:element name="NumberToDollarsResult" type="xs:string"/>
-              </xs:sequence>
-            </xs:complexType>
-          </xs:element>
-        </xs:schema>
-      </types>
-      <message name="NumberToWordsSoapRequest">
-        <part name="parameters" element="tns:NumberToWords"/>
-      </message>
-      <message name="NumberToWordsSoapResponse">
-        <part name="parameters" element="tns:NumberToWordsResponse"/>
-      </message>
-      <message name="NumberToDollarsSoapRequest">
-        <part name="parameters" element="tns:NumberToDollars"/>
-      </message>
-      <message name="NumberToDollarsSoapResponse">
-        <part name="parameters" element="tns:NumberToDollarsResponse"/>
-      </message>
-      <portType name="NumberConversionSoapType">
-        <operation name="NumberToWords">
-          <documentation>Returns the word corresponding to the positive number passed as parameter. Limited to quadrillions.</documentation>
-          <input message="tns:NumberToWordsSoapRequest"/>
-          <output message="tns:NumberToWordsSoapResponse"/>
-        </operation>
-        <operation name="NumberToDollars">
-          <documentation>Returns the non-zero dollar amount of the passed number.</documentation>
-          <input message="tns:NumberToDollarsSoapRequest"/>
-          <output message="tns:NumberToDollarsSoapResponse"/>
-        </operation>
-      </portType>
-      <binding name="NumberConversionSoapBinding" type="tns:NumberConversionSoapType">
-        <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="NumberToWords">
-          <soap:operation soapAction="" style="document"/>
-          <input>
-            <soap:body use="literal"/>
-          </input>
-          <output>
-            <soap:body use="literal"/>
-          </output>
-        </operation>
-        <operation name="NumberToDollars">
-          <soap:operation soapAction="" style="document"/>
-          <input>
-            <soap:body use="literal"/>
-          </input>
-          <output>
-            <soap:body use="literal"/>
-          </output>
-        </operation>
-      </binding>
-      <binding name="NumberConversionSoapBinding12" type="tns:NumberConversionSoapType">
-        <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
-        <operation name="NumberToWords">
-          <soap12:operation soapAction="" style="document"/>
-          <input>
-            <soap12:body use="literal"/>
-          </input>
-          <output>
-            <soap12:body use="literal"/>
-          </output>
-        </operation>
-        <operation name="NumberToDollars">
-          <soap12:operation soapAction="" style="document"/>
-          <input>
-            <soap12:body use="literal"/>
-          </input>
-          <output>
-            <soap12:body use="literal"/>
-          </output>
-        </operation>
-      </binding>
-      <service name="NumberConversion">
-        <documentation>The Number Conversion Web Service, implemented with Visual DataFlex, provides functions that convert numbers into words or dollar amounts.</documentation>
-        <port name="NumberConversionSoap" binding="tns:NumberConversionSoapBinding">
-          <soap:address location="https://www.dataaccess.com/webservicesserver/NumberConversion.wso"/>
-        </port>
-        <port name="NumberConversionSoap12" binding="tns:NumberConversionSoapBinding12">
-          <soap12:address location="https://www.dataaccess.com/webservicesserver/NumberConversion.wso"/>
-        </port>
-      </service>
-    </definitions>
+  type: openapi
+  lifecycle: production
+  owner: lighthouse-dash
+  system: vets-api
+  definition:
+    $text: https://github.com/department-of-veterans-affairs/vets-api/blob/master/modules/claims_api/app/swagger/claims_api/v1/swagger.json
+
