@@ -66,11 +66,7 @@ metadata:
       - testAvailable
       - testAvailableDocumentation
   annotations:
-    wsdl: https://www.dataaccess.com/webservicesserver/NumberConversion.wso?wsdl
-    datadog/production-monitor-id: '139178'
-    datadog/sandbox-monitor-id: '139178'
-    pagerduty.com/integration-key: edf42287285e440fc012cced0e9a0bf4
-    hub.lighthouse.va.gov/api-id: appeals
+    hub.lighthouse.va.gov/api-id: new-api
   name: new-maturity-api
   description: New Maturity API.
   tags:
