@@ -1,0 +1,71 @@
+apiVersion: backstage.io/v1alpha1
+kind: API
+metadata:
+  name: CODE-VA-MARKER-TEST-API
+  description: API for testing maturity marker related stuff
+  annotations:
+    github.com/project-slug: https://github.com/department-of-veterans-affairs/code-va
+  title: CODE-VA-MARKER-TEST-API
+  tags:
+  - external
+  va:
+    maturity-markers:
+      version: 1
+      documentation:
+      - noDocumentation
+      - notPublic
+      - legacyFormat
+      - vaNetwork
+      - public
+      - openAPI
+      architecture:
+      - rest
+      - soap
+      - graphql
+      - rpc
+      lowerEnvironmentAccess:
+      - moreThan2
+      - lessThan2
+      - auto
+      productionAccess:
+      - moreThan2
+      - lessThan2
+      - immediate
+      performance:
+      - notAvailable
+      - p95Greater
+      - p95Less
+      - p99Less
+      reliability:
+      - notAvailable
+      - notFollowing
+      - sloExists
+      - slo99
+      - follow
+      apiStatus:
+      - notAvailable
+      - noMetrics
+      - noLogs
+      - statusExists
+      - statusHistoric
+      - logs
+      - metrics
+      support:
+      - notSupported
+      - notMaintained
+      - supportWithoutTeam
+      - maintenanceLimited
+      - supportedWithTeam
+      - activelyMaintained
+      hosting:
+      - noCloud
+      - cloudManual
+      - cloudAuto
+      testData:
+      - notAvailable
+      - testAvailable
+      - testAvailableDocumentation
+spec:
+  lifecycle: production
+  owner: team-a
+  type: openapi
