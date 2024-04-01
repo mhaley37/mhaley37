@@ -64,7 +64,6 @@ metadata:
       testData:
       - notAvailable
       - testAvailable
-      - testAvailableDocumentation
   annotations:
     hub.lighthouse.va.gov/api-id: new-api
   name: new-maturity-api
