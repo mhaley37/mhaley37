@@ -27,4 +27,4 @@ jobs:
     steps:
     - name: echo
       run: |
-        echo ${{ toJson(needs) }}
+        echo "${{ toJson(needs) }}"
