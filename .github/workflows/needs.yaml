@@ -27,4 +27,4 @@ jobs:
     steps:
     - name: echo
       run: |
-        echo ${{ needs.* }}
+        echo ${{ fromJson(needs.*) }}
