@@ -1,0 +1,30 @@
+name: Matrix Test
+on:
+  push:
+  
+jobs:
+  job1:
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo
+      run: echo "hello!"
+
+  job2:
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo
+      run: echo "hello!"
+
+  job3:
+    runs-on: ubuntu-latest
+    steps:
+    - name: echo
+      run: echo "hello!"
+
+  job4:
+    runs-on: ubuntu-latest
+    needs: [job1, job2, job3]
+    steps:
+    - name: echo
+      run: |
+        echo ${{ needs.* }}
