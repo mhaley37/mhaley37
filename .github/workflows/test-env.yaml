@@ -1,0 +1,33 @@
+name: Continuous Delivery (CD)
+
+on:
+  push
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  notify-workflow-result:
+    name: Notify workflow result
+    runs-on: ubuntu-22.04
+    env:
+      success-msg: >-
+        :large_green_circle: Release version
+          <https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}|${{ github.ref_name }}> was successfully deployed to ${{ needs.setup-env-args.outputs.deploy-env }}!
+      failure-msg: >-
+        :red_circle: A <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.workflow }}> run on _${{ github.ref_name }}_ has failed!
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: Set Helm Deploy Failure Message
+        id: failure-message
+        run: >-
+          echo "MSG=${{ env.failure-msg }}" >> $GITHUB_ENV
+      - name: Set ArgoCD Deployment Success Message
+        run: >-
+          echo "ARGOCD_MSG=${{ env.success-msg }} (ArgoCD)" >> $GITHUB_ENV
+      #- name: Set ArgoCD Deployment Failed Message
+      #  if: needs.trigger-argocd-deploy.result == 'failure'
+      #  run: >-
+      #    echo "ARGOCD_MSG=${{ env.failure-msg }} (ArgoCD)" >> $GITHUB_ENV
