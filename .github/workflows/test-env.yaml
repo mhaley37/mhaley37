@@ -14,7 +14,7 @@ jobs:
     env:
       success-msg: >-
         :large_green_circle: Release version
-          <https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}|${{ github.ref_name }}> was successfully deployed to ${{ needs.setup-env-args.outputs.deploy-env }}!
+          <https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}|${{ github.ref_name }}> was successfully deployed to ${{ 'sandbox' }}!
       failure-msg: >-
         :red_circle: A <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.workflow }}> run on _${{ github.ref_name }}_ has failed!
     steps:
