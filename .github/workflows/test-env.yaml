@@ -20,10 +20,10 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-      - name: Set Helm Deploy Failure Message
-        id: failure-message
-        run: >-
-          echo "MSG=${{ env.failure-msg }}" >> $GITHUB_ENV
+      #- name: Set Helm Deploy Failure Message
+      #  id: failure-message
+      #  run: >-
+      #    echo "MSG=${{ env.failure-msg }}" >> $GITHUB_ENV
       - name: Set ArgoCD Deployment Success Message
         run: >-
           echo "ARGOCD_MSG=${{ env.success-msg }} (ArgoCD)" >> $GITHUB_ENV
