@@ -12,7 +12,8 @@ jobs:
     name: Notify workflow result
     runs-on: ubuntu-22.04
     env:
-      success-msg: ":large_green_circle: Release version <https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}|${{ github.ref_name }}> was successfully deployed to ${{ 'sandbox' }}!"
+      success-msg: >-
+        :large_green_circle: Release version <https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }}|${{ github.ref_name }}> was successfully deployed to ${{ 'sandbox' }}!
       failure-msg: >-
         :red_circle: A <https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}|${{ github.workflow }}> run on _${{ github.ref_name }}_ has failed!
     steps:
