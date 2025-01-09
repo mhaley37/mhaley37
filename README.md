@@ -1,5 +1,4 @@
 - 👋 Hi, I’m Mike Haley
-- 👀 I’m interested in many things
 
 <!---
 mhaley37/mhaley37 is a ✨ special ✨ repository because its `README.md` (this file) appears on your GitHub profile.
