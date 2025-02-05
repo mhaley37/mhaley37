@@ -15,49 +15,64 @@ defaults:
 
 jobs:
 
-  optional-job:
-    name: Job that may not run, that other jobs are dependent on
-    if: ${{ !inputs.skip-needs-job }}
-    runs-on: ubuntu-22.04
+  fake-job:
+    name: Do fake stuff
+    runs-on: ubuntu-latest
     steps:
-      - name: No Op
-        run: echo "optional-job has run"
+    - name: Fail step
+      continue-on-error: true
+      run: |
+        exit 42
+    - name: Good step
+      run: |
+        echo "A-OK"
+    - name: fail workflow if failed
+      if: failure()
+      run: |
+        exit 3;
+  # optional-job:
+  #   name: Job that may not run, that other jobs are dependent on
+  #   if: ${{ !inputs.skip-needs-job }}
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: No Op
+  #       run: echo "optional-job has run"
 
-  always-job:
-    name: Always run job
-    needs: [ optional-job ]
-    if: |
-      !failure()
-      && !cancelled()
-    runs-on: ubuntu-22.04
-    steps:
-      - name: No Op
-        run: echo "always-job has run"
+  # always-job:
+  #   name: Always run job
+  #   needs: [ optional-job ]
+  #   if: |
+  #     !failure()
+  #     && !cancelled()
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: No Op
+  #       run: echo "always-job has run"
     
-  last-job:
-    name: Runs after always-job
-    needs: [ always-job ]
-    runs-on: ubuntu-22.04
-    steps:
-      - name: No Op
-        run: echo "last-job has run"
+  # last-job:
+  #   name: Runs after always-job
+  #   needs: [ always-job ]
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - name: No Op
+  #       run: echo "last-job has run"
 
-  last-job-always:
-    name: Runs after always-job, ALWAYS
-    needs: [ always-job ]
-    runs-on: ubuntu-22.04
-    if: always()
-    steps:
-    - name: No Op
-      run: echo "last-job has run"
+  # last-job-always:
+  #   name: Runs after always-job, ALWAYS
+  #   needs: [ always-job ]
+  #   runs-on: ubuntu-22.04
+  #   if: always()
+  #   steps:
+  #   - name: No Op
+  #     run: echo "last-job has run"
 
-  last-job-not-fail:
-    name: Runs after always-job, if non fail non cancel
-    if: |
-      !failure()
-      && !cancelled()    
-    needs: [ always-job ]
-    runs-on: ubuntu-22.04
-    steps:
-    - name: No Op
-      run: echo "last-job has run"             
+  # last-job-not-fail:
+  #   name: Runs after always-job, if non fail non cancel
+  #   if: |
+  #     !failure()
+  #     && !cancelled()    
+  #   needs: [ always-job ]
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #   - name: No Op
+  #     run: echo "last-job has run"             
